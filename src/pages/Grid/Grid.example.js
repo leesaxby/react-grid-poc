@@ -2,7 +2,6 @@ import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
 
-import {LabeledInput, InputRow} from './LabeledInput';
 import { Grid, AutoSizer } from 'react-virtualized';
 
 import cn from 'classnames';
@@ -46,69 +45,21 @@ export default class GridExample extends PureComponent {
 
       <div>
         <button onClick={this._onSort}>sort</button>
-        <InputRow>
-          <LabeledInput
-            label="Num columns"
-            name="columnCount"
-            onChange={this._onColumnCountChange}
-            value={columnCount}
-          />
-          <LabeledInput
-            label="Num rows"
-            name="rowCount"
-            onChange={this._onRowCountChange}
-            value={rowCount}
-          />
-          <LabeledInput
+
+          <input type="text"
             label="Scroll to column"
             name="onScrollToColumn"
-            placeholder="Index..."
+            placeholder="Scroll to Column..."
             onChange={this._onScrollToColumnChange}
             value={scrollToColumn || ''}
           />
-          <LabeledInput
+          <input type="text"
             label="Scroll to row"
             name="onScrollToRow"
-            placeholder="Index..."
+            placeholder="Scroll to Row..."
             onChange={this._onScrollToRowChange}
             value={scrollToRow || ''}
           />
-          <LabeledInput
-            label="List height"
-            name="height"
-            onChange={event =>
-              this.setState({height: parseInt(event.target.value, 10) || 1})}
-            value={height}
-          />
-          <LabeledInput
-            disabled={useDynamicRowHeight}
-            label="Row height"
-            name="rowHeight"
-            onChange={event =>
-              this.setState({
-                rowHeight: parseInt(event.target.value, 10) || 1,
-              })}
-            value={rowHeight}
-          />
-          <LabeledInput
-            label="Overscan columns"
-            name="overscanColumnCount"
-            onChange={event =>
-              this.setState({
-                overscanColumnCount: parseInt(event.target.value, 10) || 0,
-              })}
-            value={overscanColumnCount}
-          />
-          <LabeledInput
-            label="Overscan rows"
-            name="overscanRowCount"
-            onChange={event =>
-              this.setState({
-                overscanRowCount: parseInt(event.target.value, 10) || 0,
-              })}
-            value={overscanRowCount}
-          />
-        </InputRow>
 
         <AutoSizer disableHeight>
           {({width}) => (
