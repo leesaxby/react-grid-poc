@@ -15,7 +15,7 @@ export default class TableExample extends PureComponent {
       list: props.list,
       disableHeader: false,
       headerHeight: 30,
-      height: 270,
+      height: 600,
       hideIndexRow: false,
       overscanRowCount: 10,
       rowHeight: 40,
@@ -192,7 +192,6 @@ export default class TableExample extends PureComponent {
   }
 
   _sortList({sortBy, sortDirection}) {
-    console.log(this.state)
     const {list} = this.state;
 
     return list
