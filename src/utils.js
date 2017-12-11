@@ -4,7 +4,7 @@
 export function generateRandomList() {
   const list = [];
 
-  for (var i = 0; i < 1000; i++) {
+  for (var i = 0; i < 1000000; i++) {
     const random = loremIpsum[i % loremIpsum.length];
     const randoms = [random];
 
