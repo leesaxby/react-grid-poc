@@ -1,0 +1,46 @@
+# This is an editor config file - an editor agnostic configuraiton file that
+# informs your IDE/text editor how to format files. Some editors will pick
+# this file up by default, some will need a plugin. See http://editorconfig.org
+# for full details.
+#
+# The contents of this file does not necessarily represent the 'correct' way
+# of formatting that particular file. The values here may seem random, but are
+# compiled from the existing source's prevailing standards as is best possible.
+root = true
+
+# All files should use UNIX line endings, trailing newlines, and UTF-8 encoding.
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+# Java and Groovy should follow the Gresham coding standard of tabs displayed as
+# four columns wide.
+[*.{java,groovy},Jenkinsfile]
+indent_style = tab
+tab_size = 4
+
+# Shell scripting is 2 spaces
+[*.{sh,bat}]
+indent_style = space
+indent_size = 2
+
+# SQL is more compact, at 2 column width tabs.
+[*.sql]
+indent_style = tab
+tab_size = 4
+
+# XML (as distinct from HTML) should use four spaces
+[*.xml]
+indent_style = space
+indent_size = 4
+
+# Javascript and HTML should be four spaces for indentation
+[*.{js,html}]
+indent_style = space
+indent_size = 4
+
+# JSON files are two spaces for indentation
+[*.json]
+indent_style = space
+indent_size = 2

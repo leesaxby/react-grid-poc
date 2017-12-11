@@ -1,0 +1,45 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true,
+        "amd": true
+    },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "no-mixed-spaces-and-tabs": [
+            0,
+            "smart-tabs"
+        ],
+        "quotes": [
+            2,
+            "single"
+        ],
+        "semi": [
+            2,
+            "always"
+        ],
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "APP_THEME"
+            }
+        ]
+    },
+    "globals": {
+        "_": true,
+        "module": true,
+        "__dirname": true
+    }
+}
