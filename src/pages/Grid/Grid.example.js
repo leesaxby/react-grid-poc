@@ -8,18 +8,20 @@ import { Grid, AutoSizer } from 'react-virtualized';
 import cn from 'classnames';
 import styles from './Grid.example.css';
 
+const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
+
 export default class GridExample extends PureComponent {
   constructor(props, context) {
-
     super(props, context);
 
     this.state = {
+      list: props.list,
       columnCount: 1000,
       height: 300,
       overscanColumnCount: 0,
       overscanRowCount: 10,
       rowHeight: 40,
-      rowCount: 1000,
+      rowCount: 1000000,
       scrollToColumn: undefined,
       scrollToRow: undefined,
       useDynamicRowHeight: false,
@@ -36,6 +38,8 @@ export default class GridExample extends PureComponent {
     this._onScrollToRowChange = this._onScrollToRowChange.bind(this);
     this._renderBodyCell = this._renderBodyCell.bind(this);
     this._renderLeftSideCell = this._renderLeftSideCell.bind(this);
+    this._sortList = this._sortList.bind(this);
+    this._onSort = this._onSort.bind(this);
   }
 
   render() {
@@ -58,6 +62,7 @@ export default class GridExample extends PureComponent {
 
 
 <div>
+  <button onClick={this._onSort}>sort</button>
         <InputRow>
           <LabeledInput
             label="Num columns"
@@ -168,7 +173,7 @@ export default class GridExample extends PureComponent {
   }
 
   _getDatum(index) {
-    const {list} = this.props;
+    const {list} = this.state;
     return list.get(index % list.size);
   }
 
@@ -192,10 +197,10 @@ export default class GridExample extends PureComponent {
 
     switch (columnIndex) {
       case 1:
-        content = `row:${rowIndex} - ${datum.name}`;
+        content = datum.index;
         break;
       case 2:
-        content = datum.random;
+        content = datum.name;
         break;
       default:
         content = `${datum.random}`;
@@ -275,4 +280,20 @@ export default class GridExample extends PureComponent {
 
     this.setState({scrollToRow});
   }
+
+  _sortList({sortBy, sortDirection}) {
+    const sortedList = this.state.list
+      .sortBy(item => item[sortBy])
+      .update(
+        list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
+      );
+
+      const newList = Immutable.List(sortedList);
+      this.setState({ list: newList,  scrollToRow: 0 });
+  }
+
+  _onSort() {
+    this._sortList({ sortBy: 'index', sortDirection: 'DESC' });
+  }
+
 }
