@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
-
+import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
 
 import cn from 'classnames';
@@ -14,6 +14,11 @@ export default class GridExample extends PureComponent {
     super(props, context);
 
     this.state = {
+      sort: {
+        sortDirection: 'ASC',
+        sortBy: 'name'
+      },
+      filter: '',
       list: props.list,
       columnCount: 1000,
       height: 600,
@@ -22,7 +27,7 @@ export default class GridExample extends PureComponent {
       rowHeight: 40,
       rowCount: 1000000,
       scrollToColumn: undefined,
-      scrollToRow: undefined,
+      scrollToRow: 0,
       useDynamicRowHeight: false,
     };
 
@@ -44,7 +49,26 @@ export default class GridExample extends PureComponent {
     return (
 
       <div>
-        <button onClick={this._onSort}>sort</button>
+        <ToggleButtonGroup type="radio"
+                           name="sortToggle"
+                           role="radiogroup"
+                           value={this.state.sort.sortDirection}
+                           onChange={this._onSort}>
+
+          <ToggleButton value="ASC"
+                        role="radio">
+            ASC
+          </ToggleButton>
+
+          <ToggleButton value="DESC"
+                        role="radio">
+            DESC
+          </ToggleButton>
+
+        </ToggleButtonGroup>
+
+        <input type="text" value={this.state.filter} onChange={this._onFilterChange}/>
+        {this.state.filter}
 
           <input type="text"
             label="Scroll to column"
@@ -215,19 +239,63 @@ export default class GridExample extends PureComponent {
     this.setState({scrollToRow});
   }
 
-  _sortList = ({sortBy, sortDirection}) => {
+  _sortList = (sortBy, sortDirection) => {
+    let { scrollToRow } = this.state;
     const sortedList = this.state.list
       .sortBy(item => item[sortBy])
       .update(
         list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
       );
 
-      const newList = Immutable.List(sortedList);
-      this.setState({ list: newList,  scrollToRow: 0 });
+      scrollToRow = !scrollToRow ? 1 : 0;
+      this.setState({ list: sortedList,  scrollToRow });
   }
 
-  _onSort = () => {
-    this._sortList({ sortBy: 'index', sortDirection: 'DESC' });
+  _onSort = (sortDirection) => {
+    const { sortBy } = this.state.sort;
+
+    this.setState({
+      sort: {
+        sortDirection,
+        sortBy
+      }
+    });
+
+    this._sortList( sortBy, sortDirection );
+  }
+
+  _handleFilterChange = (filter) => {
+    let newFilters = Object.assign({}, this.state.filters);
+
+    if (filter.filterTerm) {
+        newFilters[filter.column.key] = filter;
+    } else {
+        delete newFilters[filter.column.key];
+    }
+
+    this.setState({ filters: newFilters });
+  };
+
+  _onFilterChange = (e) => {
+    this.setState({ filter: e.target.value });
+    this._handleFilter(e.target.value);
+  }
+
+  _handleFilter = (term) => {
+    console.log(term)
+    const list = this.state.list.filter(({name}) => name.includes(term));
+
+
+
+    if (list.size && term.length >= 2) {
+      console.log("Filtered")
+      this.setState({ list,  scrollToRow: 2 });
+    }
+
+    if (!list.size || term.length === 0) {
+      console.log("original")
+      this.setState({ list: this.props.list,  scrollToRow: 0 });
+    }
   }
 
 }
