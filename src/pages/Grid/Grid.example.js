@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
-import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
+import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl } from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
 
 import cn from 'classnames';
@@ -49,41 +49,63 @@ export default class GridExample extends PureComponent {
     return (
 
       <div>
-        <ToggleButtonGroup type="radio"
-                           name="sortToggle"
-                           role="radiogroup"
-                           value={this.state.sort.sortDirection}
-                           onChange={this._onSort}>
 
-          <ToggleButton value="ASC"
-                        role="radio">
-            ASC
-          </ToggleButton>
+            <GridStyle>
+                <Row>
+                    <Col  lg={2}>
+                      <ControlLabel>Sort {this.state.sort.sortBy}</ControlLabel>
+                        <ToggleButtonGroup type="radio"
+                                           name="sortToggle"
+                                           role="radiogroup"
+                                           value={this.state.sort.sortDirection}
+                                           onChange={this._onSort}>
 
-          <ToggleButton value="DESC"
-                        role="radio">
-            DESC
-          </ToggleButton>
+                          <ToggleButton value="ASC"
+                                        role="radio">
+                            ASC
+                          </ToggleButton>
 
-        </ToggleButtonGroup>
+                          <ToggleButton value="DESC"
+                                        role="radio">
+                            DESC
+                          </ToggleButton>
 
-        <input type="text" value={this.state.filter} onChange={this._onFilterChange}/>
-        {this.state.filter}
-
-          <input type="text"
-            label="Scroll to column"
-            name="onScrollToColumn"
-            placeholder="Scroll to Column..."
-            onChange={this._onScrollToColumnChange}
-            value={scrollToColumn || ''}
-          />
-          <input type="text"
-            label="Scroll to row"
-            name="onScrollToRow"
-            placeholder="Scroll to Row..."
-            onChange={this._onScrollToRowChange}
-            value={scrollToRow || ''}
-          />
+                        </ToggleButtonGroup>
+                    </Col>
+                    <Col lg={2}>
+                      <ControlLabel>Search Field: {this.state.sort.sortBy}</ControlLabel>
+                      <FormControl
+                        id="search"
+                        type="text"
+                        label="Scroll to Column"
+                        placeholder="Enter Search Term..."
+                        value={this.state.filter}
+                        onChange={this._onFilterChange} />
+                    </Col>
+                    <Col lg={2}>
+                      <ControlLabel>Scroll to Column</ControlLabel>
+                      <FormControl
+                          id="search"
+                          type="text"
+                          name="onScrollToColumn"
+                          label="Scroll to Column"
+                          placeholder="Enter Index"
+                          onChange={this._onScrollToColumnChange}
+                          value={scrollToColumn || ''} />
+                    </Col>
+                    <Col lg={2}>
+                      <ControlLabel>Scroll to Row</ControlLabel>
+                      <FormControl
+                          id="search"
+                          type="text"
+                          name="onScrollToRow"
+                          label="Scroll to Row"
+                          placeholder="Enter Index"
+                          onChange={this._onScrollToRowChange}
+                          value={scrollToRow || ''} />
+                    </Col>
+                </Row>
+            </GridStyle>
 
         <AutoSizer disableHeight>
           {({width}) => (
@@ -115,6 +137,17 @@ export default class GridExample extends PureComponent {
     } else {
       return this._renderBodyCell({columnIndex, key, rowIndex, style});
     }
+  }
+
+  _onColummSelect = (index) => {
+    const { sortDirection } = this.state.sort;
+    const selectedColName = Object.keys(this.state.list.get(0))[index];
+    this.setState({
+      sort: {
+        sortDirection,
+        sortBy: selectedColName
+      }
+    });
   }
 
   _getColumnWidth = ({index}) => {
@@ -170,7 +203,7 @@ export default class GridExample extends PureComponent {
     });
 
     return (
-      <div className={classNames} key={key} style={style}>
+      <div onClick={() => {this._onColummSelect(columnIndex);}} className={classNames} key={key} style={style}>
         {content}
       </div>
     );
@@ -264,37 +297,24 @@ export default class GridExample extends PureComponent {
     this._sortList( sortBy, sortDirection );
   }
 
-  _handleFilterChange = (filter) => {
-    let newFilters = Object.assign({}, this.state.filters);
-
-    if (filter.filterTerm) {
-        newFilters[filter.column.key] = filter;
-    } else {
-        delete newFilters[filter.column.key];
-    }
-
-    this.setState({ filters: newFilters });
-  };
-
   _onFilterChange = (e) => {
     this.setState({ filter: e.target.value });
     this._handleFilter(e.target.value);
   }
 
   _handleFilter = (term) => {
-    console.log(term)
-    const list = this.state.list.filter(({name}) => name.includes(term));
+    let { scrollToRow } = this.state;
+    const { sortBy } = this.state.sort;
+    const list = this.state.list.filter(({ [sortBy]: col }) => col.includes(term));
 
-
+    scrollToRow = !scrollToRow ? 1 : 0;
 
     if (list.size && term.length >= 2) {
-      console.log("Filtered")
-      this.setState({ list,  scrollToRow: 2 });
+      this.setState({ list,  scrollToRow });
     }
 
     if (!list.size || term.length === 0) {
-      console.log("original")
-      this.setState({ list: this.props.list,  scrollToRow: 0 });
+      this.setState({ list: this.props.list,  scrollToRow });
     }
   }
 
