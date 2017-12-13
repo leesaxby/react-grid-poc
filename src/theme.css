@@ -693,3 +693,7 @@
 
 .ReactVirtualized__List {
 }
+
+.data-grid .panel-body {
+  padding: 0px;
+}

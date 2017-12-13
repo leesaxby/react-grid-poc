@@ -53,46 +53,46 @@ export default class GridExample extends PureComponent {
     return (
 
       <div>
-
-            <GridStyle fluid={true}>
+            <GridStyle fluid={true} style={{ 'marginTop': '10px' }}>
                 <Row>
                     <Col lg={2}>
 
-                    <Panel header="Filters" bsStyle="primary">
-                        <FormGroup>
-                          <ControlLabel>Name</ControlLabel>
-                          <FormControl
-                            id="search"
-                            name="name"
-                            type="text"
-                            placeholder="Filter..."
-                            value={this.state.filters.name}
-                            onChange={this._onFilterChange} />
-                        </FormGroup>
+                      <Panel header="Filters" bsStyle="primary">
+                          <FormGroup>
+                            <ControlLabel>Name</ControlLabel>
+                            <FormControl
+                              id="search"
+                              name="name"
+                              type="text"
+                              placeholder="Filter..."
+                              value={this.state.filters.name}
+                              onChange={this._onFilterChange} />
+                          </FormGroup>
 
-                        <FormGroup>
-                          <ControlLabel>Age</ControlLabel>
-                          <FormControl
-                            id="search"
-                            name="age"
-                            type="text"
-                            placeholder="Filter..."
-                            value={this.state.filters.age}
-                            onChange={this._onFilterChange} />
-                        </FormGroup>
+                          <FormGroup>
+                            <ControlLabel>Age</ControlLabel>
+                            <FormControl
+                              id="search"
+                              name="age"
+                              type="text"
+                              placeholder="Filter..."
+                              value={this.state.filters.age}
+                              onChange={this._onFilterChange} />
+                          </FormGroup>
 
-                        <FormGroup>
-                          <ControlLabel>Description</ControlLabel>
-                          <FormControl
-                            id="search"
-                            name="random"
-                            type="text"
-                            placeholder="Filter..."
-                            value={this.state.filter}
-                            onChange={this._onFilterChange} />
-                        </FormGroup>
-                    </Panel>
-
+                          <FormGroup>
+                            <ControlLabel>Description</ControlLabel>
+                            <FormControl
+                              id="search"
+                              name="random"
+                              type="text"
+                              placeholder="Filter..."
+                              value={this.state.filter}
+                              onChange={this._onFilterChange} />
+                          </FormGroup>
+                      </Panel>
+                  </Col>
+                  <Col lg={2}>
                     <Panel header="Sort" bsStyle="primary">
                       <FormGroup>
 
@@ -114,7 +114,7 @@ export default class GridExample extends PureComponent {
                             Age
                           </Radio>
                         </FormGroup>
-                        <div>
+
                           <ToggleButtonGroup type="radio"
                                             name="sortToggle"
                                             role="radiogroup"
@@ -132,34 +132,37 @@ export default class GridExample extends PureComponent {
                             </ToggleButton>
 
                           </ToggleButtonGroup>
-                        </div>
+
                       </FormGroup>
 
                     </Panel>
 
                     </Col>
-                    <Col lg={10}>
-                      <AutoSizer disableHeight>
-                        {({width}) => (
-                          <Grid
-                            cellRenderer={this._cellRenderer}
-                            className={styles.BodyGrid}
-                            columnWidth={this._getColumnWidth}
-                            columnCount={columnCount}
-                            height={height}
-                            noContentRenderer={this._noContentRenderer}
-                            overscanColumnCount={overscanColumnCount}
-                            overscanRowCount={overscanRowCount}
-                            rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
-                            rowCount={rowCount}
-                            scrollToColumn={scrollToColumn}
-                            scrollToRow={scrollToRow}
-                            width={width}
-                          />
-                        )}
-                      </AutoSizer>
+                </Row>
+                <Row>
+                    <Col lg={12}>
+                      <Panel header="Grid" bsStyle="primary" className="data-grid">
+                        <AutoSizer disableHeight>
+                          {({width}) => (
+                            <Grid
+                              cellRenderer={this._cellRenderer}
+                              className={styles.BodyGrid}
+                              columnWidth={this._getColumnWidth}
+                              columnCount={columnCount}
+                              height={height}
+                              noContentRenderer={this._noContentRenderer}
+                              overscanColumnCount={overscanColumnCount}
+                              overscanRowCount={overscanRowCount}
+                              rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
+                              rowCount={rowCount}
+                              scrollToColumn={scrollToColumn}
+                              scrollToRow={scrollToRow}
+                              width={width}
+                            />
+                          )}
+                        </AutoSizer>
+                      </Panel>
                     </Col>
-
                 </Row>
             </GridStyle>
 
@@ -169,11 +172,11 @@ export default class GridExample extends PureComponent {
   }
 
   _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
-    if (columnIndex === 0) {
-      return this._renderLeftSideCell({columnIndex, key, rowIndex, style});
-    } else {
+    // if (columnIndex === 0) {
+    //   return this._renderLeftSideCell({columnIndex, key, rowIndex, style});
+    // } else {
       return this._renderBodyCell({columnIndex, key, rowIndex, style});
-    }
+    // }
   }
 
   _onColummSelect = (index) => {
@@ -190,11 +193,11 @@ export default class GridExample extends PureComponent {
   _getColumnWidth = ({index}) => {
     switch (index) {
       case 0:
-        return 50;
+        return 70;
       case 1:
-        return 100;
+        return 150;
       case 2:
-        return 300;
+        return 50;
       default:
         return 300;
     }
@@ -224,13 +227,13 @@ export default class GridExample extends PureComponent {
     let content;
 
     switch (columnIndex) {
-      case 1:
+      case 0:
         content = datum.index;
         break;
-      case 2:
+      case 1:
         content = datum.name;
         break;
-      case 3:
+      case 2:
         content = datum.age;
         break;
       default:
