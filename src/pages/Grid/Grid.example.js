@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
-import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl } from 'react-bootstrap';
+import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl, FormGroup, Panel} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
 
 import cn from 'classnames';
@@ -18,7 +18,11 @@ export default class GridExample extends PureComponent {
         sortDirection: 'ASC',
         sortBy: 'name'
       },
-      filter: '',
+      filters: {
+        name: '',
+        age: '',
+        random: ''
+      },
       list: props.list,
       columnCount: 1000,
       height: 600,
@@ -50,82 +54,71 @@ export default class GridExample extends PureComponent {
 
       <div>
 
-            <GridStyle>
+            <GridStyle fluid={true}>
                 <Row>
-                    <Col  lg={2}>
-                      <ControlLabel>Sort {this.state.sort.sortBy}</ControlLabel>
-                        <ToggleButtonGroup type="radio"
-                                           name="sortToggle"
-                                           role="radiogroup"
-                                           value={this.state.sort.sortDirection}
-                                           onChange={this._onSort}>
-
-                          <ToggleButton value="ASC"
-                                        role="radio">
-                            ASC
-                          </ToggleButton>
-
-                          <ToggleButton value="DESC"
-                                        role="radio">
-                            DESC
-                          </ToggleButton>
-
-                        </ToggleButtonGroup>
-                    </Col>
                     <Col lg={2}>
-                      <ControlLabel>Search Field: {this.state.sort.sortBy}</ControlLabel>
-                      <FormControl
-                        id="search"
-                        type="text"
-                        label="Scroll to Column"
-                        placeholder="Enter Search Term..."
-                        value={this.state.filter}
-                        onChange={this._onFilterChange} />
+
+                    <Panel header="Filters" bsStyle="primary">
+                        <FormGroup>
+                          <ControlLabel>Name</ControlLabel>
+                          <FormControl
+                            id="search"
+                            name="name"
+                            type="text"
+                            placeholder="Filter..."
+                            value={this.state.filters.name}
+                            onChange={this._onFilterChange} />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <ControlLabel>Age</ControlLabel>
+                          <FormControl
+                            id="search"
+                            name="age"
+                            type="text"
+                            placeholder="Filter..."
+                            value={this.state.filters.age}
+                            onChange={this._onFilterChange} />
+                        </FormGroup>
+
+                        <FormGroup>
+                          <ControlLabel>Description</ControlLabel>
+                          <FormControl
+                            id="search"
+                            name="random"
+                            type="text"
+                            placeholder="Filter..."
+                            value={this.state.filter}
+                            onChange={this._onFilterChange} />
+                        </FormGroup>
+                    </Panel>
+
                     </Col>
-                    <Col lg={2}>
-                      <ControlLabel>Scroll to Column</ControlLabel>
-                      <FormControl
-                          id="search"
-                          type="text"
-                          name="onScrollToColumn"
-                          label="Scroll to Column"
-                          placeholder="Enter Index"
-                          onChange={this._onScrollToColumnChange}
-                          value={scrollToColumn || ''} />
+                    <Col lg={10}>
+                      <AutoSizer disableHeight>
+                        {({width}) => (
+                          <Grid
+                            cellRenderer={this._cellRenderer}
+                            className={styles.BodyGrid}
+                            columnWidth={this._getColumnWidth}
+                            columnCount={columnCount}
+                            height={height}
+                            noContentRenderer={this._noContentRenderer}
+                            overscanColumnCount={overscanColumnCount}
+                            overscanRowCount={overscanRowCount}
+                            rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
+                            rowCount={rowCount}
+                            scrollToColumn={scrollToColumn}
+                            scrollToRow={scrollToRow}
+                            width={width}
+                          />
+                        )}
+                      </AutoSizer>
                     </Col>
-                    <Col lg={2}>
-                      <ControlLabel>Scroll to Row</ControlLabel>
-                      <FormControl
-                          id="search"
-                          type="text"
-                          name="onScrollToRow"
-                          label="Scroll to Row"
-                          placeholder="Enter Index"
-                          onChange={this._onScrollToRowChange}
-                          value={scrollToRow || ''} />
-                    </Col>
+
                 </Row>
             </GridStyle>
 
-        <AutoSizer disableHeight>
-          {({width}) => (
-            <Grid
-              cellRenderer={this._cellRenderer}
-              className={styles.BodyGrid}
-              columnWidth={this._getColumnWidth}
-              columnCount={columnCount}
-              height={height}
-              noContentRenderer={this._noContentRenderer}
-              overscanColumnCount={overscanColumnCount}
-              overscanRowCount={overscanRowCount}
-              rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
-              rowCount={rowCount}
-              scrollToColumn={scrollToColumn}
-              scrollToRow={scrollToRow}
-              width={width}
-            />
-          )}
-        </AutoSizer>
         </div>
 
     );
@@ -192,6 +185,9 @@ export default class GridExample extends PureComponent {
         break;
       case 2:
         content = datum.name;
+        break;
+      case 3:
+        content = datum.age;
         break;
       default:
         content = `${datum.random}`;
@@ -298,14 +294,19 @@ export default class GridExample extends PureComponent {
   }
 
   _onFilterChange = (e) => {
-    this.setState({ filter: e.target.value });
-    this._handleFilter(e.target.value);
+    const updatedFilters = Object.assign({}, this.state.filters, { [e.target.name]: e.target.value });
+
+    this.setState({
+      filters: updatedFilters
+    });
+
+    this._handleFilter(e.target.name, e.target.value);
   }
 
-  _handleFilter = (term) => {
+  _handleFilter = (field, term) => {
     let { scrollToRow } = this.state;
-    const { sortBy } = this.state.sort;
-    const list = this.state.list.filter(({ [sortBy]: col }) => col.includes(term));
+    //const { sortBy } = this.state.sort;
+    const list = this.state.list.filter(({ [field]: col }) => col.includes(term));
 
     scrollToRow = !scrollToRow ? 1 : 0;
 
