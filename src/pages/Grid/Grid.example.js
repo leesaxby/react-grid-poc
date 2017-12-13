@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
-import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl, FormGroup, Panel} from 'react-bootstrap';
+import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl, FormGroup, Panel, Radio} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
 
 import cn from 'classnames';
@@ -91,6 +91,50 @@ export default class GridExample extends PureComponent {
                             value={this.state.filter}
                             onChange={this._onFilterChange} />
                         </FormGroup>
+                    </Panel>
+
+                    <Panel header="Sort" bsStyle="primary">
+                      <FormGroup>
+
+                        <FormGroup onChange={this._onSortFieldChange}
+                                   value={this.state.sort.sortBy}>
+                          <Radio name="sortFieldGroup"
+                                 value="index"
+                                 inline>
+                            Index
+                          </Radio>
+                          <Radio name="sortFieldGroup"
+                                 value="name"
+                                 inline>
+                            Name
+                          </Radio>
+                          <Radio name="sortFieldGroup"
+                                 value="age"
+                                 inline>
+                            Age
+                          </Radio>
+                        </FormGroup>
+                        <div>
+                          <ToggleButtonGroup type="radio"
+                                            name="sortToggle"
+                                            role="radiogroup"
+                                            value={this.state.sort.sortDirection}
+                                            onChange={this._onSort}>
+
+                            <ToggleButton value="ASC"
+                                          role="radio">
+                              ASC
+                            </ToggleButton>
+
+                            <ToggleButton value="DESC"
+                                          role="radio">
+                              DESC
+                            </ToggleButton>
+
+                          </ToggleButtonGroup>
+                        </div>
+                      </FormGroup>
+
                     </Panel>
 
                     </Col>
@@ -278,6 +322,17 @@ export default class GridExample extends PureComponent {
 
       scrollToRow = !scrollToRow ? 1 : 0;
       this.setState({ list: sortedList,  scrollToRow });
+  }
+
+  _onSortFieldChange = (e) => {
+    const { sortDirection } = this.state.sort;
+
+    this.setState({
+      sort: {
+        sortDirection,
+        sortBy: e.target.value
+      }
+    });
   }
 
   _onSort = (sortDirection) => {
