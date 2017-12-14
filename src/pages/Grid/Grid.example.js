@@ -172,11 +172,7 @@ export default class GridExample extends PureComponent {
   }
 
   _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
-    // if (columnIndex === 0) {
-    //   return this._renderLeftSideCell({columnIndex, key, rowIndex, style});
-    // } else {
       return this._renderBodyCell({columnIndex, key, rowIndex, style});
-    // }
   }
 
   _onColummSelect = (index) => {
@@ -250,69 +246,6 @@ export default class GridExample extends PureComponent {
         {content}
       </div>
     );
-  }
-
-  _renderLeftSideCell = ({key, rowIndex, style}) => {
-    const datum = this._getDatum(rowIndex);
-
-    const classNames = cn(styles.cell, styles.letterCell);
-
-    // Don't modify styles.
-    // These are frozen by React now (as of 16.0.0).
-    // Since Grid caches and re-uses them, they aren't safe to modify.
-    style = {
-      ...style,
-      backgroundColor: datum.color,
-    };
-
-    return (
-      <div className={classNames} key={key} style={style}>
-        {datum.name.charAt(0)}
-      </div>
-    );
-  }
-
-  _updateUseDynamicRowHeights = (value) => {
-    this.setState({
-      useDynamicRowHeight: value,
-    });
-  }
-
-  _onColumnCountChange = (event) => {
-    const columnCount = parseInt(event.target.value, 10) || 0;
-
-    this.setState({columnCount});
-  }
-
-  _onRowCountChange = (event) => {
-    const rowCount = parseInt(event.target.value, 10) || 0;
-
-    this.setState({rowCount});
-  }
-
-  _onScrollToColumnChange = (event) =>{
-    const {columnCount} = this.state;
-    let scrollToColumn = Math.min(
-      columnCount - 1,
-      parseInt(event.target.value, 10),
-    );
-
-    if (isNaN(scrollToColumn)) {
-      scrollToColumn = undefined;
-    }
-
-    this.setState({scrollToColumn});
-  }
-
-  _onScrollToRowChange = (event) => {
-    const {rowCount} = this.state;
-    let scrollToRow = Math.min(rowCount - 1, parseInt(event.target.value, 10));
-
-    if (isNaN(scrollToRow)) {
-      scrollToRow = undefined;
-    }
-
-    this.setState({scrollToRow});
   }
 
   _sortList = (sortBy, sortDirection) => {
