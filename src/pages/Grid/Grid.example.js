@@ -34,8 +34,6 @@ export default class GridExample extends PureComponent {
       useDynamicRowHeight: false,
     };
 
-
-    console.log(props.list.get(0))
   }
 
   render() {
