@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
 import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl, FormGroup, Panel, Radio} from 'react-bootstrap';
@@ -35,6 +34,8 @@ export default class GridExample extends PureComponent {
       useDynamicRowHeight: false,
     };
 
+
+    console.log(props.list.get(0))
   }
 
   render() {
@@ -86,6 +87,17 @@ export default class GridExample extends PureComponent {
                               id="search"
                               name="random"
                               type="text"
+                              placeholder="Filter..."
+                              value={this.state.filter}
+                              onChange={this._onFilterChange} />
+                          </FormGroup>
+
+                          <FormGroup>
+                            <ControlLabel>Date</ControlLabel>
+                            <FormControl
+                              id="search"
+                              name="date"
+                              type="date"
                               placeholder="Filter..."
                               value={this.state.filter}
                               onChange={this._onFilterChange} />
@@ -194,6 +206,8 @@ export default class GridExample extends PureComponent {
         return 150;
       case 2:
         return 50;
+      case 3:
+        return 100;
       default:
         return 300;
     }
@@ -231,6 +245,9 @@ export default class GridExample extends PureComponent {
         break;
       case 2:
         content = datum.age;
+        break;
+      case 3:
+        content = datum.date;
         break;
       default:
         content = `${datum.random}`;
