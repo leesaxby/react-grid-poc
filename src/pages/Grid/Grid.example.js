@@ -203,8 +203,10 @@ export default class GridExample extends PureComponent {
       case 1:
         return 150;
       case 2:
-        return 50;
+        return 150;
       case 3:
+        return 50;
+      case 4:
         return 100;
       default:
         return 300;
@@ -242,13 +244,28 @@ export default class GridExample extends PureComponent {
         content = datum.name;
         break;
       case 2:
-        content = datum.age;
+        content = datum.otherNames;
         break;
       case 3:
+        content = datum.age;
+        break;
+      case 4:
         content = datum.date;
         break;
+      case 5:
+        content = datum.random2;
+        break;
+      case 6:
+        content = datum.random3;
+        break;
+      case 7:
+        content = datum.random4;
+        break;
+      case 8:
+        content = datum.random5;
+        break;
       default:
-        content = `${datum.random}`;
+        content = datum.random;
         break;
     }
 

@@ -5,21 +5,18 @@ export function generateRandomList() {
   const list = [];
 
   for (var i = 0; i < 1000000; i++) {
-    const random = loremIpsum[i % loremIpsum.length];
-    const randoms = [random];
-
-    for (let j = Math.round(Math.random() * 10); j--; ) {
-      randoms.push(loremIpsum[(i * j) % loremIpsum.length]);
-    }
-
     list.push({
-      color: BADGE_COLORS[i % BADGE_COLORS.length],
       index: i,
-      name: NAMES[i % NAMES.length],
+      name: NAMES[(Math.round(Math.random() * NAMES.length) % NAMES.length)],
+      otherNames: NAMES[(Math.round(Math.random() * NAMES.length) % NAMES.length)],
       age: AGES[i % AGES.length],
       date: DATES[i % DATES.length],
-      random,
-      randomLong: randoms.join(' '),
+      random: getRandomData(loremIpsum),
+      random2: getRandomData(loremIpsum),
+      random3: getRandomData(loremIpsum),
+      random4: getRandomData(loremIpsum),
+      random5: getRandomData(loremIpsum),
+   //   randomLong: randoms.join(' '),
       size: ROW_HEIGHTS[Math.floor(Math.random() * ROW_HEIGHTS.length)],
     });
   }
@@ -27,23 +24,8 @@ export function generateRandomList() {
   return list;
 }
 
-const BADGE_COLORS = [
-  '#f44336',
-  '#3f51b5',
-  '#4caf50',
-  '#ff9800',
-  '#2196f3',
-  '#374046',
-  '#cddc39',
-  '#2196f3',
-  '#9c27b0',
-  '#ffc107',
-  '#009688',
-  '#673ab7',
-  '#ffeb3b',
-  '#cddc39',
-  '#795548',
-];
+const getRandomData = (list) => list[(Math.round(Math.random() * list.length) % list.length)];
+
 const AGES = [
   '34',
   '22',
