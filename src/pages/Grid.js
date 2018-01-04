@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
-import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl, FormGroup, Panel, Radio} from 'react-bootstrap';
+import Immutable from 'immutable';
+import { ToggleButtonGroup, ToggleButton, Grid as GridStyle, Row, Col, FormGroup, Panel, Radio} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
 import Filters from './Grid/Filters';
 
@@ -30,6 +31,10 @@ export default class GridTable extends PureComponent {
       useDynamicRowHeight: false,
     };
 
+  }
+
+  static propTypes = {
+      list: PropTypes.instanceOf(Immutable.List).isRequired
   }
 
   render() {
