@@ -4,9 +4,12 @@ import Immutable from 'immutable';
 import { ToggleButtonGroup, ToggleButton, Grid as GridStyle, Row, Col, FormGroup, Panel, Radio} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
 import Filter from './Grid/Filter';
+import Sort from './Grid/Sort';
 
 import cn from 'classnames';
 import styles from './Grid/Grid.css';
+
+
 
 const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 
@@ -55,89 +58,46 @@ export default class GridTable extends PureComponent {
       <div>
             <GridStyle fluid={true} style={{ 'marginTop': '10px' }}>
                 <Row>
-                  <Col lg={2}>
-                      <Panel header="Filters" bsStyle="primary">
-                          <Filter name="name" onFilterChange={this._handleFilter}/>
-                          <Filter name="age" onFilterChange={this._handleFilter}/>
-                          <Filter name="date" onFilterChange={this._handleFilter}/>
-                          <Filter name="random" onFilterChange={this._handleFilter}/>
-                      </Panel>
-                  </Col>
-                  <Col lg={2}>
-                  {/* <Sort /> */}
-                    <Panel header="Sort" bsStyle="primary">
-                      <FormGroup>
-
-                        <FormGroup onChange={this._onSortFieldChange}
-                                   value={this.state.sort.sortBy}>
-                          <Radio name="sortFieldGroup"
-                                 value="index"
-                                 inline>
-                            Index
-                          </Radio>
-                          <Radio name="sortFieldGroup"
-                                 value="name"
-                                 inline>
-                            Name
-                          </Radio>
-                          <Radio name="sortFieldGroup"
-                                 value="age"
-                                 inline>
-                            Age
-                          </Radio>
-                        </FormGroup>
-
-                          <ToggleButtonGroup type="radio"
-                                            name="sortToggle"
-                                            role="radiogroup"
-                                            value={this.state.sort.sortDirection}
-                                            onChange={this._onSort}>
-
-                            <ToggleButton value="ASC"
-                                          role="radio">
-                              ASC
-                            </ToggleButton>
-
-                            <ToggleButton value="DESC"
-                                          role="radio">
-                              DESC
-                            </ToggleButton>
-
-                          </ToggleButtonGroup>
-
-                      </FormGroup>
-
-                    </Panel>
+                    <Col lg={2}>
+                        <Panel header="Filters" bsStyle="primary">
+                            <Filter name="name" onFilterChange={this._handleFilter}/>
+                            <Filter name="age" onFilterChange={this._handleFilter}/>
+                            <Filter name="date" onFilterChange={this._handleFilter}/>
+                            <Filter name="random" onFilterChange={this._handleFilter}/>
+                        </Panel>
+                    </Col>
+                    <Col lg={2}>
+                      <Sort onSort={this._onSort}
+                            sortList={this._sortList}/>
 
                     </Col>
                 </Row>
                 <Row>
                     <Col lg={12}>
-                      <Panel header="Grid" bsStyle="primary" className="data-grid">
-                        <AutoSizer disableHeight>
-                          {({width}) => (
-                            <Grid
-                              cellRenderer={this._cellRenderer}
-                              className={styles.BodyGrid}
-                              columnWidth={this._getColumnWidth}
-                              columnCount={columnCount}
-                              height={height}
-                              noContentRenderer={this._noContentRenderer}
-                              overscanColumnCount={overscanColumnCount}
-                              overscanRowCount={overscanRowCount}
-                              rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
-                              rowCount={rowCount}
-                              scrollToColumn={scrollToColumn}
-                              scrollToRow={scrollToRow}
-                              width={width}
-                            />
-                          )}
-                        </AutoSizer>
-                      </Panel>
+                        <Panel header="Grid" bsStyle="primary" className="data-grid">
+                            <AutoSizer disableHeight>
+                              {({width}) => (
+                                  <Grid
+                                    cellRenderer={this._cellRenderer}
+                                    className={styles.BodyGrid}
+                                    columnWidth={this._getColumnWidth}
+                                    columnCount={columnCount}
+                                    height={height}
+                                    noContentRenderer={this._noContentRenderer}
+                                    overscanColumnCount={overscanColumnCount}
+                                    overscanRowCount={overscanRowCount}
+                                    rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
+                                    rowCount={rowCount}
+                                    scrollToColumn={scrollToColumn}
+                                    scrollToRow={scrollToRow}
+                                    width={width}
+                                  />
+                              )}
+                            </AutoSizer>
+                        </Panel>
                     </Col>
                 </Row>
             </GridStyle>
-
         </div>
 
     );
@@ -252,30 +212,6 @@ export default class GridTable extends PureComponent {
 
       scrollToRow = !scrollToRow ? 1 : 0;
       this.setState({ list: sortedList,  scrollToRow });
-  }
-
-  _onSortFieldChange = (e) => {
-    const { sortDirection } = this.state.sort;
-
-    this.setState({
-      sort: {
-        sortDirection,
-        sortBy: e.target.value
-      }
-    });
-  }
-
-  _onSort = (sortDirection) => {
-    const { sortBy } = this.state.sort;
-
-    this.setState({
-      sort: {
-        sortDirection,
-        sortBy
-      }
-    });
-
-    this._sortList( sortBy, sortDirection );
   }
 
   _handleFilter = (name, value) => {
