@@ -1,20 +1,24 @@
 import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Filter from './Cube/Filter';
 import Sort from './Cube/Sort';
 
-import {generateRandomList} from '../utils';
-
-const list = Immutable.List(generateRandomList());
-
 const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 
 export default class Cube extends PureComponent {
-  constructor(props, context) {
-    super(props, context);
-  }
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            list: this.props.list
+        };
+    }
+
+    static propTypes = {
+        list: PropTypes.instanceOf(Immutable.List).isRequired
+    }
 
   render() {
 
@@ -40,7 +44,7 @@ export default class Cube extends PureComponent {
                 <Row>
                     <Col lg={12}>
                         <Panel header="Grid" bsStyle="primary" className="data-grid">
-                            <GridTable list={list}/>
+                            <GridTable list={this.state.list}/>
                         </Panel>
                     </Col>
                 </Row>
@@ -51,29 +55,29 @@ export default class Cube extends PureComponent {
   }
 
   _sortList = (sortBy, sortDirection) => {
-    let { scrollToRow } = this.state;
+  //  let { scrollToRow } = this.state;
     const sortedList = this.state.list
       .sortBy(item => item[sortBy])
       .update(
         list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
       );
 
-      scrollToRow = !scrollToRow ? 1 : 0;
-      this.setState({ list: sortedList,  scrollToRow });
+     // scrollToRow = !scrollToRow ? 1 : 0;
+      this.setState({ list: sortedList/*,  scrollToRow*/ });
   }
 
   _handleFilter = (name, value) => {
-    let { scrollToRow } = this.state;
+   // let { scrollToRow } = this.state;
     const list = this.state.list.filter(({ [name]: col }) => col.includes(value));
 
-    scrollToRow = !scrollToRow ? 1 : 0;
+   // scrollToRow = !scrollToRow ? 1 : 0;
 
     if (list.size && value.length >= 2) {
-      this.setState({ list,  scrollToRow });
+      this.setState({ list/*,  scrollToRow*/ });
     }
 
     if (!list.size || value.length === 0) {
-      this.setState({ list: this.props.list,  scrollToRow });
+      this.setState({ list: this.props.list/*,  scrollToRow*/ });
     }
   }
 

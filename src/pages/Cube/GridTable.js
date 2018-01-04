@@ -8,22 +8,21 @@ import styles from './Cube.css';
 
 export default class GridTable extends PureComponent {
   constructor(props, context) {
-    super(props, context);
+        super(props, context);
 
-    this.state = {
-      list: props.list,
-      columnCount: 1000,
-      height: 600,
-      overscanColumnCount: 0,
-      overscanRowCount: 10,
-      rowHeight: 40,
-      rowCount: 1000000,
-      scrollToColumn: undefined,
-      scrollToRow: 0,
-      useDynamicRowHeight: false,
-    };
+        this.state = {
 
-  }
+          columnCount: 1000,
+          height: 600,
+          overscanColumnCount: 0,
+          overscanRowCount: 10,
+          rowHeight: 40,
+          rowCount: 1000000,
+          scrollToColumn: undefined,
+          scrollToRow: 0,
+          useDynamicRowHeight: false,
+        };
+    }
 
   static propTypes = {
       list: PropTypes.instanceOf(Immutable.List).isRequired
@@ -74,7 +73,7 @@ export default class GridTable extends PureComponent {
 
   _onColummSelect = (index) => {
     const { sortDirection } = this.state.sort;
-    const selectedColName = Object.keys(this.state.list.get(0))[index];
+    const selectedColName = Object.keys(this.props.list.get(0))[index];
     this.setState({
       sort: {
         sortDirection,
@@ -101,7 +100,7 @@ export default class GridTable extends PureComponent {
   }
 
   _getDatum = (index) => {
-    const {list} = this.state;
+    const {list} = this.props;
     return list.get(index % list.size);
   }
 
