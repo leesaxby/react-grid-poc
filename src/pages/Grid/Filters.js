@@ -1,31 +1,19 @@
 import PropTypes from 'prop-types';
-import React, {PureComponent} from 'react';
-import { ControlLabel, FormControl, FormGroup, Panel } from 'react-bootstrap';
+import React from 'react';
+import { Panel } from 'react-bootstrap';
 import Filter from './Filters/Filter';
 
-export default class GridTable extends PureComponent {
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
-            name: '',
-            age: '',
-            random: '',
-            date: ''
-        };
-    }
-
-    static propTypes = {
-        onFilterChange: PropTypes.func.isRequired
-    }
-
-    render() {
-        return (
-            <Panel header="Filters" bsStyle="primary">
-                <Filter name="name" onFilterChange={this.props.onFilterChange}/>
-                <Filter name="age" onFilterChange={this.props.onFilterChange}/>
-                <Filter name="date" onFilterChange={this.props.onFilterChange}/>
-                <Filter name="random" onFilterChange={this.props.onFilterChange}/>
-            </Panel>
-        );
-    }
+export default function Filters({ onFilterChange }) {
+    return (
+        <Panel header="Filters" bsStyle="primary">
+            <Filter name="name" onFilterChange={onFilterChange}/>
+            <Filter name="age" onFilterChange={onFilterChange}/>
+            <Filter name="date" onFilterChange={onFilterChange}/>
+            <Filter name="random" onFilterChange={onFilterChange}/>
+        </Panel>
+    );
 }
+
+Filters.propTypes = {
+    onFilterChange: PropTypes.func.isRequired
+};
