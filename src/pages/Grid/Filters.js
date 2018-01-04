@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
 import { ControlLabel, FormControl, FormGroup, Panel } from 'react-bootstrap';
+import Filter from './Filters/Filter';
 
 export default class GridTable extends PureComponent {
     constructor(props, context) {
@@ -20,49 +21,11 @@ export default class GridTable extends PureComponent {
     render() {
         return (
             <Panel header="Filters" bsStyle="primary">
-                <FormGroup>
-                    <ControlLabel>Name</ControlLabel>
-                    <FormControl id="search"
-                                name="name"
-                                type="text"
-                                placeholder="Filter..."
-                                value={this.state.name}
-                                onChange={this._onFilterChange} />
-                </FormGroup>
-                <FormGroup>
-                    <ControlLabel>Age</ControlLabel>
-                    <FormControl id="search"
-                                name="age"
-                                type="text"
-                                placeholder="Filter..."
-                                value={this.state.age}
-                                onChange={this._onFilterChange} />
-                </FormGroup>
-                <FormGroup>
-                    <ControlLabel>Description</ControlLabel>
-                    <FormControl id="search"
-                                name="random"
-                                type="text"
-                                placeholder="Filter..."
-                                value={this.state.random}
-                                onChange={this._onFilterChange} />
-                </FormGroup>
-                <FormGroup>
-                    <ControlLabel>Date</ControlLabel>
-                    <FormControl id="search"
-                                name="date"
-                                type="date"
-                                placeholder="Filter..."
-                                value={this.state.date}
-                                onChange={this._onFilterChange} />
-                    </FormGroup>
+                <Filter name="name" onFilterChange={this.props.onFilterChange}/>
+                <Filter name="age" onFilterChange={this.props.onFilterChange}/>
+                <Filter name="date" onFilterChange={this.props.onFilterChange}/>
+                <Filter name="random" onFilterChange={this.props.onFilterChange}/>
             </Panel>
         );
-    }
-
-    _onFilterChange = (e) => {
-        const updatedFilters = Object.assign({}, this.state, { [e.target.name]: e.target.value });
-        this.setState(updatedFilters);
-        this.props.onFilterChange(e.target.name, e.target.value);
     }
 }

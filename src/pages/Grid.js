@@ -272,17 +272,17 @@ export default class GridTable extends PureComponent {
     this._sortList( sortBy, sortDirection );
   }
 
-  _handleFilter = (field, term) => {
+  _handleFilter = (name, value) => {
     let { scrollToRow } = this.state;
-    const list = this.state.list.filter(({ [field]: col }) => col.includes(term));
+    const list = this.state.list.filter(({ [name]: col }) => col.includes(value));
 
     scrollToRow = !scrollToRow ? 1 : 0;
 
-    if (list.size && term.length >= 2) {
+    if (list.size && value.length >= 2) {
       this.setState({ list,  scrollToRow });
     }
 
-    if (!list.size || term.length === 0) {
+    if (!list.size || value.length === 0) {
       this.setState({ list: this.props.list,  scrollToRow });
     }
   }
