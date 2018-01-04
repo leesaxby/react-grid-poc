@@ -3,17 +3,17 @@ import React, {PureComponent} from 'react';
 import Immutable from 'immutable';
 import { ToggleButtonGroup, ToggleButton, Grid as GridStyle, Row, Col, FormGroup, Panel, Radio} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
-import Filter from './Grid/Filter';
-import Sort from './Grid/Sort';
+import Filter from './Cube/Filter';
+import Sort from './Cube/Sort';
 
 import cn from 'classnames';
-import styles from './Grid/Grid.css';
+import styles from './Cube/Cube.css';
 
 
 
 const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 
-export default class GridTable extends PureComponent {
+export default class Cube extends PureComponent {
   constructor(props, context) {
     super(props, context);
 
