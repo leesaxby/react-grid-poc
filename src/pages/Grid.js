@@ -2,13 +2,14 @@ import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
 import { ToggleButtonGroup, ToggleButton, ControlLabel, Grid as GridStyle, Row, Col, FormControl, FormGroup, Panel, Radio} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
+import Filters from './Grid/Filters';
 
 import cn from 'classnames';
-import styles from './Grid.example.css';
+import styles from './Grid/Grid.css';
 
 const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 
-export default class GridExample extends PureComponent {
+export default class GridTable extends PureComponent {
   constructor(props, context) {
     super(props, context);
 
@@ -16,11 +17,6 @@ export default class GridExample extends PureComponent {
       sort: {
         sortDirection: 'ASC',
         sortBy: 'name'
-      },
-      filters: {
-        name: '',
-        age: '',
-        random: ''
       },
       list: props.list,
       columnCount: 1000,
@@ -54,53 +50,8 @@ export default class GridExample extends PureComponent {
       <div>
             <GridStyle fluid={true} style={{ 'marginTop': '10px' }}>
                 <Row>
-                    <Col lg={2}>
-
-                      <Panel header="Filters" bsStyle="primary">
-                          <FormGroup>
-                            <ControlLabel>Name</ControlLabel>
-                            <FormControl
-                              id="search"
-                              name="name"
-                              type="text"
-                              placeholder="Filter..."
-                              value={this.state.filters.name}
-                              onChange={this._onFilterChange} />
-                          </FormGroup>
-
-                          <FormGroup>
-                            <ControlLabel>Age</ControlLabel>
-                            <FormControl
-                              id="search"
-                              name="age"
-                              type="text"
-                              placeholder="Filter..."
-                              value={this.state.filters.age}
-                              onChange={this._onFilterChange} />
-                          </FormGroup>
-
-                          <FormGroup>
-                            <ControlLabel>Description</ControlLabel>
-                            <FormControl
-                              id="search"
-                              name="random"
-                              type="text"
-                              placeholder="Filter..."
-                              value={this.state.filter}
-                              onChange={this._onFilterChange} />
-                          </FormGroup>
-
-                          <FormGroup>
-                            <ControlLabel>Date</ControlLabel>
-                            <FormControl
-                              id="search"
-                              name="date"
-                              type="date"
-                              placeholder="Filter..."
-                              value={this.state.filter}
-                              onChange={this._onFilterChange} />
-                          </FormGroup>
-                      </Panel>
+                  <Col lg={2}>
+                    <Filters onFilterChange={this._handleFilter}/>
                   </Col>
                   <Col lg={2}>
                     <Panel header="Sort" bsStyle="primary">
@@ -316,17 +267,8 @@ export default class GridExample extends PureComponent {
     this._sortList( sortBy, sortDirection );
   }
 
-  _onFilterChange = (e) => {
-    const updatedFilters = Object.assign({}, this.state.filters, { [e.target.name]: e.target.value });
-
-    this.setState({
-      filters: updatedFilters
-    });
-
-    this._handleFilter(e.target.name, e.target.value);
-  }
-
   _handleFilter = (field, term) => {
+    console.log(field + " " + term)
     let { scrollToRow } = this.state;
     //const { sortBy } = this.state.sort;
     const list = this.state.list.filter(({ [field]: col }) => col.includes(term));
