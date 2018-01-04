@@ -3,7 +3,7 @@ import React, {PureComponent} from 'react';
 import Immutable from 'immutable';
 import { ToggleButtonGroup, ToggleButton, Grid as GridStyle, Row, Col, FormGroup, Panel, Radio} from 'react-bootstrap';
 import { Grid, AutoSizer } from 'react-virtualized';
-import Filters from './Grid/Filters';
+import Filter from './Grid/Filter';
 
 import cn from 'classnames';
 import styles from './Grid/Grid.css';
@@ -56,9 +56,15 @@ export default class GridTable extends PureComponent {
             <GridStyle fluid={true} style={{ 'marginTop': '10px' }}>
                 <Row>
                   <Col lg={2}>
-                    <Filters onFilterChange={this._handleFilter}/>
+                      <Panel header="Filters" bsStyle="primary">
+                          <Filter name="name" onFilterChange={this._handleFilter}/>
+                          <Filter name="age" onFilterChange={this._handleFilter}/>
+                          <Filter name="date" onFilterChange={this._handleFilter}/>
+                          <Filter name="random" onFilterChange={this._handleFilter}/>
+                      </Panel>
                   </Col>
                   <Col lg={2}>
+                  {/* <Sort /> */}
                     <Panel header="Sort" bsStyle="primary">
                       <FormGroup>
 

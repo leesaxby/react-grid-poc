@@ -19,12 +19,12 @@ export default class Filter extends React.PureComponent {
     render() {
         return (
             <FormGroup>
-            <ControlLabel>{this.state.name}</ControlLabel>
-            <FormControl name={this.state.name}
-                         type="text"
-                         placeholder="Filter..."
-                         value={this.state.value}
-                         onChange={this.onChange} />
+                <ControlLabel>{this.state.name}</ControlLabel>
+                <FormControl name={this.state.name}
+                            type="text"
+                            placeholder="Filter..."
+                            value={this.state.value}
+                            onChange={this.onChange} />
             </FormGroup>
         );
     }
