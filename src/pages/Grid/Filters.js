@@ -14,6 +14,10 @@ export default class GridTable extends PureComponent {
     };
   }
 
+  static propTypes = {
+      onFilterChange: PropTypes.func.isRequired
+  }
+
   render() {
       return (
           <Panel header="Filters" bsStyle="primary">

@@ -268,9 +268,7 @@ export default class GridTable extends PureComponent {
   }
 
   _handleFilter = (field, term) => {
-    console.log(field + " " + term)
     let { scrollToRow } = this.state;
-    //const { sortBy } = this.state.sort;
     const list = this.state.list.filter(({ [field]: col }) => col.includes(term));
 
     scrollToRow = !scrollToRow ? 1 : 0;
