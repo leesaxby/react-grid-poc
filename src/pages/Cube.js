@@ -46,9 +46,7 @@ export default class Cube extends PureComponent {
                 </Row>
                 <Row>
                     <Col lg={12}>
-                        <Panel header="Grid" bsStyle="primary" className="data-grid">
-                            <GridTable scrollRow={this.state.scrollToRow} list={this.state.list}/>
-                        </Panel>
+                        <GridTable scrollRow={this.state.scrollToRow} list={this.state.list}/>
                     </Col>
                 </Row>
             </GridStyle>
