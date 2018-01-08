@@ -12,7 +12,10 @@ export default class Cube extends PureComponent {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            list: this.props.list
+            list: this.props.list,
+            // TODO: Currently updating scroll to row to force grid to
+            // refresh after change. Find better way.
+            scrollToRow: 0
         };
     }
 
@@ -44,7 +47,7 @@ export default class Cube extends PureComponent {
                 <Row>
                     <Col lg={12}>
                         <Panel header="Grid" bsStyle="primary" className="data-grid">
-                            <GridTable list={this.state.list}/>
+                            <GridTable scrollRow={this.state.scrollToRow} list={this.state.list}/>
                         </Panel>
                     </Col>
                 </Row>
@@ -55,29 +58,29 @@ export default class Cube extends PureComponent {
   }
 
   _sortList = (sortBy, sortDirection) => {
-  //  let { scrollToRow } = this.state;
+    let { scrollToRow } = this.state;
     const sortedList = this.state.list
       .sortBy(item => item[sortBy])
       .update(
         list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
       );
 
-     // scrollToRow = !scrollToRow ? 1 : 0;
+      scrollToRow = !scrollToRow ? 1 : 0;
       this.setState({ list: sortedList/*,  scrollToRow*/ });
   }
 
   _handleFilter = (name, value) => {
-   // let { scrollToRow } = this.state;
+    let { scrollToRow } = this.state;
     const list = this.state.list.filter(({ [name]: col }) => col.includes(value));
 
-   // scrollToRow = !scrollToRow ? 1 : 0;
+    scrollToRow = !scrollToRow ? 1 : 0;
 
     if (list.size && value.length >= 2) {
-      this.setState({ list/*,  scrollToRow*/ });
+      this.setState({ list,  scrollToRow });
     }
 
     if (!list.size || value.length === 0) {
-      this.setState({ list: this.props.list/*,  scrollToRow*/ });
+      this.setState({ list: this.props.list,  scrollToRow });
     }
   }
 

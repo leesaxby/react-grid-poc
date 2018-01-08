@@ -18,13 +18,13 @@ export default class GridTable extends PureComponent {
               rowHeight: 40,
               rowCount: 1000000,
               scrollToColumn: undefined,
-              scrollToRow: 0,
               useDynamicRowHeight: false,
           };
     }
 
     static propTypes = {
-        list: PropTypes.instanceOf(Immutable.List).isRequired
+        list: PropTypes.instanceOf(Immutable.List).isRequired,
+        scrollRow: PropTypes.number.isRequired
     }
 
     render() {
@@ -36,7 +36,6 @@ export default class GridTable extends PureComponent {
             rowHeight,
             rowCount,
             scrollToColumn,
-            scrollToRow,
             useDynamicRowHeight,
         } = this.state;
 
@@ -54,7 +53,7 @@ export default class GridTable extends PureComponent {
                           rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
                           rowCount={rowCount}
                           scrollToColumn={scrollToColumn}
-                          scrollToRow={scrollToRow}
+                          scrollToRow={this.props.scrollRow}
                           width={width}
                     />
                 )}
