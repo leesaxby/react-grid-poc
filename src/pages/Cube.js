@@ -64,7 +64,7 @@ export default class Cube extends PureComponent {
       );
 
       scrollToRow = !scrollToRow ? 1 : 0;
-      this.setState({ list: sortedList/*,  scrollToRow*/ });
+      this.setState({ list: sortedList,  scrollToRow });
   }
 
   _handleFilter = (name, value) => {
