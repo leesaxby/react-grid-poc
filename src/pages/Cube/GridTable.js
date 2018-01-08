@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
 import Immutable from 'immutable';
-import { Grid, AutoSizer } from 'react-virtualized';
+import { Grid, AutoSizer, ScrollSync } from 'react-virtualized';
 
 import cn from 'classnames';
 import styles from './Cube.css';
@@ -13,7 +13,7 @@ export default class GridTable extends PureComponent {
           this.state = {
               columnCount: 1000,
               height: 600,
-              overscanColumnCount: 0,
+              overscanColumnCount: 10,
               overscanRowCount: 10,
               rowHeight: 40,
               rowCount: 1000000,
@@ -40,12 +40,43 @@ export default class GridTable extends PureComponent {
         } = this.state;
 
         return (
+            <ScrollSync>
+              {({
+                onScroll,
+                scrollLeft
+              }) => {
+
+        return (
             <AutoSizer disableHeight>
                 {({width}) => (
+                <div>
+                      <div
+                        style={{
+                            backgroundColor: '#337ab7',
+                            color: '#fff',
+                            border: '1px solid #337ab7',
+                            height: rowHeight,
+                            width: width,
+                        }}>
+                        <Grid
+                          className={styles.HeaderGrid}
+                          columnWidth={this._getColumnWidth}
+                          columnCount={columnCount}
+                          height={rowHeight}
+                          overscanColumnCount={overscanColumnCount}
+                          cellRenderer={this._renderHeaderCell}
+                          rowHeight={rowHeight}
+                          rowCount={1}
+                          scrollLeft={scrollLeft}
+                          width={width}
+                        />
+                      </div>
+                      <div>
                     <Grid cellRenderer={this._cellRenderer}
                           className={styles.BodyGrid}
                           columnWidth={this._getColumnWidth}
                           columnCount={columnCount}
+                          onScroll={onScroll}
                           height={height}
                           noContentRenderer={this._noContentRenderer}
                           overscanColumnCount={overscanColumnCount}
@@ -56,13 +87,34 @@ export default class GridTable extends PureComponent {
                           scrollToRow={this.props.scrollRow}
                           width={width}
                     />
+                    </div>
+                </div>
                 )}
             </AutoSizer>
         );
+    }}
+    </ScrollSync>
+);
     }
 
     _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
         return this._renderBodyCell({columnIndex, key, rowIndex, style});
+    }
+
+    _renderHeaderCell = ({columnIndex, key, rowIndex, style}) => {
+        if (columnIndex < 1) {
+          return;
+        }
+
+        return this._renderLeftHeaderCell({columnIndex, key, rowIndex, style});
+      }
+
+    _renderLeftHeaderCell = ({columnIndex, key, style}) => {
+        return (
+          <div className={styles.headerCell} key={key} style={style}>
+            { this._getHeaderText(columnIndex) }
+          </div>
+        );
     }
 
     _onColummSelect = (index) => {
@@ -158,5 +210,22 @@ export default class GridTable extends PureComponent {
                 {content}
             </div>
         );
+    }
+
+    _getHeaderText = (colIndex) => {
+        switch (colIndex) {
+            case 0:
+                return 'Index';
+            case 1:
+                return 'Name';
+            case 2:
+                return 'Other Name';
+            case 3:
+                return 'Age';
+            case 4:
+                return 'Date';
+            default:
+                return 'Random';
+        }
     }
 }

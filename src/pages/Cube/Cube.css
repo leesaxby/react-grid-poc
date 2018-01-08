@@ -1,3 +1,8 @@
+.HeaderGrid {
+  width: 100%;
+  overflow: hidden !important;
+}
+
 .GridRow {
   margin-top: 15px;
   display: flex;
@@ -35,12 +40,12 @@
   padding: 0 .5em;
 }
 .cell {
-  border-right: 1px solid #e0e0e0;
+  /* border-right: 1px solid #e0e0e0; */
   border-bottom: 1px solid #e0e0e0;
 }
 .headerCell {
   font-weight: bold;
-  border-right: 1px solid #e0e0e0;
+  /* border-right: 1px solid #e0e0e0; */
 }
 .centeredCell {
   align-items: center;
