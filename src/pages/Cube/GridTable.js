@@ -166,50 +166,51 @@ export default class GridTable extends PureComponent {
         const rowClass = this._getRowClassName(rowIndex);
         const datum = this._getDatum(rowIndex);
 
-        let content;
+        if (datum) {
+            let content;
+            switch (columnIndex) {
+                case 0:
+                    content = datum.index;
+                    break;
+                case 1:
+                    content = datum.name;
+                    break;
+                case 2:
+                    content = datum.otherNames;
+                    break;
+                case 3:
+                    content = datum.age;
+                    break;
+                case 4:
+                    content = datum.date;
+                    break;
+                case 5:
+                    content = datum.random2;
+                    break;
+                case 6:
+                    content = datum.random3;
+                   break;
+                case 7:
+                    content = datum.random4;
+                    break;
+                case 8:
+                    content = datum.random5;
+                    break;
+                default:
+                    content = datum.random;
+                    break;
+            }
 
-        switch (columnIndex) {
-            case 0:
-                content = datum.index;
-                break;
-            case 1:
-                content = datum.name;
-                break;
-            case 2:
-                content = datum.otherNames;
-                break;
-            case 3:
-                content = datum.age;
-                break;
-            case 4:
-                content = datum.date;
-                break;
-            case 5:
-                content = datum.random2;
-                break;
-            case 6:
-                content = datum.random3;
-               break;
-            case 7:
-                content = datum.random4;
-                break;
-            case 8:
-                content = datum.random5;
-                break;
-            default:
-                content = datum.random;
-                break;
+            const classNames = cn(rowClass, styles.cell, {
+                [styles.centeredCell]: columnIndex > 2,
+            });
+
+            return (
+                <div onClick={() => {this._onColummSelect(columnIndex);}} className={classNames} key={key} style={style}>
+                    {content}
+                </div>
+            );
         }
-
-        const classNames = cn(rowClass, styles.cell, {
-            [styles.centeredCell]: columnIndex > 2,
-        });
-
-        return (
-            <div onClick={() => {this._onColummSelect(columnIndex);}} className={classNames} key={key} style={style}>
-                {content}
-            </div>
-        );
     }
 
     _getHeaderText = (colIndex) => {
