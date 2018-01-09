@@ -13,16 +13,12 @@ const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 export class Cube extends PureComponent {
     constructor(props, context) {
         super(props, context);
-        this.state = {
-            // TODO: Currently updating scroll to row to force grid to
-            // refresh after change. Find better way.
-            scrollToRow: 0
-        };
     }
 
     static propTypes = {
         list: PropTypes.instanceOf(Immutable.List).isRequired,
         getList: PropTypes.func.isRequired,
+        sort: PropTypes.instanceOf(Immutable.Map).isRequired,
         updateSort: PropTypes.func.isRequired,
     }
 
@@ -44,14 +40,14 @@ export class Cube extends PureComponent {
                             </Panel>
                         </Col>
                         <Col lg={2}>
-                        <Sort onSort={this._onSort}
-                                sortList={this.props.updateSort}/>
+                        <Sort sort={this.props.sort}
+                              sortList={this.props.updateSort}/>
 
                         </Col>
                     </Row>
                     <Row>
                         <Col lg={12}>
-                            <GridTable scrollRow={this.state.scrollToRow} list={this.props.list}/>
+                            <GridTable list={this.props.list}/>
                         </Col>
                     </Row>
                 </GridStyle>
