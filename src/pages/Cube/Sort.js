@@ -19,52 +19,52 @@ export default class Sort extends PureComponent {
     render() {
         return (
             <Panel header="Sort" bsStyle="primary">
-            {this.state.sortBy}
-            <FormGroup>
+                <FormGroup>
+                    <FormGroup onChange={this.onSortByChange}
+                               value={this.state.sortBy}>
 
-              <FormGroup onChange={this.onSortByChange}
-                         value={this.state.sortBy}>
-                <Radio name="sortFieldGroup"
-                       value="index"
-                       defaultChecked={this.state.sortBy === 'index'}
-                       inline>
-                  Index
-                </Radio>
-                <Radio name="sortFieldGroup"
-                       value="name"
-                       defaultChecked={this.state.sortBy === 'name'}
-                       inline>
-                  Name
-                </Radio>
-                <Radio name="sortFieldGroup"
-                       defaultChecked={this.state.sortBy === 'age'}
-                       value="age"
-                       inline>
-                  Age
-                </Radio>
-              </FormGroup>
+                        <Radio name="sortFieldGroup"
+                               value="index"
+                               defaultChecked={this.state.sortBy === 'index'}
+                               inline>
+                            Index
+                        </Radio>
 
-                <ToggleButtonGroup type="radio"
-                                  name="sortToggle"
-                                  role="radiogroup"
-                                  value={this.state.sortDirection}
-                                  onChange={this.onDirectionChange}>
+                        <Radio name="sortFieldGroup"
+                               value="name"
+                               defaultChecked={this.state.sortBy === 'name'}
+                               inline>
+                            Name
+                        </Radio>
 
-                  <ToggleButton value="ASC"
-                                role="radio">
-                    ASC
-                  </ToggleButton>
+                        <Radio name="sortFieldGroup"
+                               defaultChecked={this.state.sortBy === 'age'}
+                               value="age"
+                               inline>
+                            Age
+                        </Radio>
 
-                  <ToggleButton value="DESC"
-                                role="radio">
-                    DESC
-                  </ToggleButton>
+                    </FormGroup>
 
-                </ToggleButtonGroup>
+                    <ToggleButtonGroup type="radio"
+                                       name="sortToggle"
+                                       role="radiogroup"
+                                       value={this.state.sortDirection}
+                                       onChange={this.onDirectionChange}>
 
-            </FormGroup>
+                        <ToggleButton value="ASC"
+                                      role="radio">
+                            ASC
+                        </ToggleButton>
 
-          </Panel>
+                        <ToggleButton value="DESC"
+                                      role="radio">
+                            DESC
+                        </ToggleButton>
+
+                    </ToggleButtonGroup>
+                </FormGroup>
+            </Panel>
         );
     }
 
