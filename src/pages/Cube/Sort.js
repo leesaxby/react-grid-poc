@@ -19,21 +19,25 @@ export default class Sort extends PureComponent {
     render() {
         return (
             <Panel header="Sort" bsStyle="primary">
+            {this.state.sortBy}
             <FormGroup>
 
-              <FormGroup onChange={this.onSortFieldChange}
+              <FormGroup onChange={this.onSortByChange}
                          value={this.state.sortBy}>
                 <Radio name="sortFieldGroup"
                        value="index"
+                       defaultChecked={this.state.sortBy === 'index'}
                        inline>
                   Index
                 </Radio>
                 <Radio name="sortFieldGroup"
                        value="name"
+                       defaultChecked={this.state.sortBy === 'name'}
                        inline>
                   Name
                 </Radio>
                 <Radio name="sortFieldGroup"
+                       defaultChecked={this.state.sortBy === 'age'}
                        value="age"
                        inline>
                   Age
@@ -44,7 +48,7 @@ export default class Sort extends PureComponent {
                                   name="sortToggle"
                                   role="radiogroup"
                                   value={this.state.sortDirection}
-                                  onChange={this.onSort}>
+                                  onChange={this.onDirectionChange}>
 
                   <ToggleButton value="ASC"
                                 role="radio">
@@ -64,24 +68,17 @@ export default class Sort extends PureComponent {
         );
     }
 
-    onSortFieldChange = (e) => {
-        const { sortDirection } = this.state;
-
-        this.setState({
-            sortDirection,
-            sortBy: e.target.value
-        });
-      }
-
-    onSort = (sortDirection) => {
-        const { sortBy } = this.state;
-
+    updateSort = (sortBy, sortDirection) => {
         this.setState({
             sortDirection,
             sortBy
         });
 
-        this.props.sortList( sortBy, sortDirection );
+        this.props.sortList({ sortBy, sortDirection });
     }
+
+    onSortByChange = (e) => this.updateSort(e.target.value, this.state.sortDirection);
+
+    onDirectionChange = (sortDirection) => this.updateSort(this.state.sortBy, sortDirection)
 
 }
