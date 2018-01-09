@@ -31,7 +31,7 @@ export {
 
 const initialState = Map({
     list: List(),
-    sort: Map({ sortBy: '', sortDirection: 'ASC'})
+    sort: Map({ sortBy: 'index', sortDirection: 'ASC'})
 });
 
 export default function cube(state = initialState, action) {
