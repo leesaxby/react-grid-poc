@@ -8,23 +8,21 @@ import styles from './Cube.css';
 
 export default class GridTable extends PureComponent {
     constructor(props, context) {
-          super(props, context);
-
-          this.state = {
-              columnCount: 1000,
-              height: 600,
-              overscanColumnCount: 10,
-              overscanRowCount: 10,
-              rowHeight: 40,
-              rowCount: 1000000,
-              scrollToColumn: undefined,
-              useDynamicRowHeight: false,
-          };
+        super(props, context);
+        this.state = {
+            columnCount: 1000,
+            height: 600,
+            overscanColumnCount: 10,
+            overscanRowCount: 10,
+            rowHeight: 40,
+            rowCount: 1000000,
+            scrollToColumn: undefined,
+            useDynamicRowHeight: false
+        };
     }
 
     static propTypes = {
-        list: PropTypes.instanceOf(Immutable.List).isRequired,
-        scrollRow: PropTypes.number.isRequired
+        list: PropTypes.instanceOf(Immutable.List).isRequired
     }
 
     render() {
@@ -35,66 +33,60 @@ export default class GridTable extends PureComponent {
             overscanRowCount,
             rowHeight,
             rowCount,
-            scrollToColumn,
             useDynamicRowHeight,
         } = this.state;
 
         return (
             <ScrollSync>
-              {({
-                onScroll,
-                scrollLeft
-              }) => {
+                {({
+                    onScroll,
+                    scrollLeft
+                }) => {
 
-        return (
-            <AutoSizer disableHeight>
-                {({width}) => (
-                <div>
-                      <div
-                        style={{
-                            backgroundColor: '#337ab7',
-                            color: '#fff',
-                            border: '1px solid #337ab7',
-                            height: rowHeight,
-                            width: width,
-                        }}>
-                        <Grid
-                          className={styles.HeaderGrid}
-                          columnWidth={this._getColumnWidth}
-                          columnCount={columnCount}
-                          height={rowHeight}
-                          overscanColumnCount={overscanColumnCount}
-                          cellRenderer={this._renderHeaderCell}
-                          rowHeight={rowHeight}
-                          rowCount={1}
-                          scrollLeft={scrollLeft}
-                          width={width}
-                        />
-                      </div>
-                      <div>
-                    <Grid cellRenderer={this._cellRenderer}
-                          className={styles.BodyGrid}
-                          columnWidth={this._getColumnWidth}
-                          columnCount={columnCount}
-                          onScroll={onScroll}
-                          height={height}
-                          noContentRenderer={this._noContentRenderer}
-                          overscanColumnCount={overscanColumnCount}
-                          overscanRowCount={overscanRowCount}
-                          rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
-                          rowCount={rowCount}
-                          scrollToColumn={scrollToColumn}
-                          scrollToRow={this.props.scrollRow}
-                          width={width}
-                    />
-                    </div>
-                </div>
-                )}
-            </AutoSizer>
+                    return (
+                        <AutoSizer disableHeight>
+                            {({width}) => (
+                            <div>
+                                <div
+                                    style={{
+                                        backgroundColor: '#337ab7',
+                                        color: '#fff',
+                                        border: '1px solid #337ab7',
+                                        height: rowHeight,
+                                        width: width,
+                                    }}>
+                                    <Grid className={styles.HeaderGrid}
+                                          columnWidth={this._getColumnWidth}
+                                          columnCount={columnCount}
+                                          height={rowHeight}
+                                          overscanColumnCount={overscanColumnCount}
+                                          cellRenderer={this._renderHeaderCell}
+                                          rowHeight={rowHeight}
+                                          rowCount={1}
+                                          scrollLeft={scrollLeft}
+                                          width={width}/>
+                                </div>
+                                <div>
+                                    <Grid cellRenderer={this._cellRenderer}
+                                          className={styles.BodyGrid}
+                                          columnWidth={this._getColumnWidth}
+                                          columnCount={columnCount}
+                                          onScroll={onScroll}
+                                          height={height}
+                                          noContentRenderer={this._noContentRenderer}
+                                          overscanColumnCount={overscanColumnCount}
+                                          overscanRowCount={overscanRowCount}
+                                          rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
+                                          rowCount={rowCount}
+                                          width={width}/>
+                                </div>
+                            </div>
+                            )}
+                        </AutoSizer>
+                    );
+                }}
+            </ScrollSync>
         );
-    }}
-    </ScrollSync>
-);
     }
 
     _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
