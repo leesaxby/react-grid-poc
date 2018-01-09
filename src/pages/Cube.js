@@ -31,9 +31,8 @@ export class Cube extends PureComponent {
     }
 
     render() {
-
         return (
-        <div>
+            <div>
                 <GridStyle fluid={true} style={{ 'marginTop': '10px' }}>
                     <Row>
                         <Col lg={2}>
@@ -46,7 +45,7 @@ export class Cube extends PureComponent {
                         </Col>
                         <Col lg={2}>
                         <Sort onSort={this._onSort}
-                                sortList={this._handleSort}/>
+                                sortList={this.props.updateSort}/>
 
                         </Col>
                     </Row>
@@ -57,12 +56,7 @@ export class Cube extends PureComponent {
                     </Row>
                 </GridStyle>
             </div>
-
         );
-    }
-
-    _handleSort = (sortBy, sortDirection) => {
-        this.props.updateSort({ field: sortBy, direction: sortDirection  });
     }
 
     _handleFilter = (name, value) => {
@@ -83,7 +77,7 @@ export class Cube extends PureComponent {
 }
 
 const sortList = (list, sortBy, sortDirection) => {
-    // Don't want to do unnecessary initial sort.
+    // TODO: Don't want to do unnecessary initial sort.
     return list.sortBy(item => item[sortBy])
                .update(
                    list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
@@ -92,8 +86,9 @@ const sortList = (list, sortBy, sortDirection) => {
 
 const mapStateToProps = (state) => {
     const cube = state.get('cube');
+    const sort = cube.get('sort');
     return {
-        list: sortList( cube.get('list'), 'index', 'DESC' ),
+        list: sortList( cube.get('list'), sort.get('sortBy'), sort.get('sortDirection') ),
         sort: cube.get('sort')
     };
 };
