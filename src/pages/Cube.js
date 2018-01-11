@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, Map, Seq } from 'immutable';
+import { List, Map } from 'immutable';
 import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Filter from './Cube/Filter';

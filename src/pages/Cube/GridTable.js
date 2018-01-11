@@ -32,7 +32,6 @@ export default class GridTable extends PureComponent {
             overscanColumnCount,
             overscanRowCount,
             rowHeight,
-            rowCount,
             useDynamicRowHeight,
         } = this.state;
 
