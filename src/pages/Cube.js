@@ -70,18 +70,20 @@ export class Cube extends PureComponent {
 const filterRow = (filters = [], row = {}) => {
     return filters
             .reduce((arr, x) => {
-                if (x.get('value')) {
-                    arr.push( row[ x.get('name') ].includes( x.get('value') ));
-                }
+                arr.push( row[ x.get('name') ].includes( x.get('value') ));
                 return arr;
-
             }, [])
             .every(x => x);
 };
 
 const filterList = (list, filters) => {
-    const newList = list.filter((row) => filterRow(filters, row));
-    return newList.size === 0 ? list : newList;
+    const activeFilters = filters.filter(f => f);
+
+    if (!activeFilters.size) {
+        return list;
+    }
+
+    return list.filter((row) => filterRow(activeFilters , row));
 };
 
 const sortList = (list, sortBy, sortDirection) => {
@@ -97,8 +99,6 @@ const mapStateToProps = (state) => {
     const filters = state.get('filters');
     const sort = cube.get('sort');
 
-
-
     return {
         // TODO: Make sure we don't perform any unnecessary sorts/filters
         list: sortList( filterList(list, filters), sort.get('sortBy'), sort.get('sortDirection') ),
@@ -107,12 +107,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getList: () => dispatch(getList()),
-        updateSort: (sort) => dispatch(updateSort(sort)),
-        updateFilters: (filters) => dispatch(updateFilters(filters)),
-    };
-};
+const mapDispatchToProps = (dispatch) => ({
+    getList: () => dispatch(getList()),
+    updateSort: (sort) => dispatch(updateSort(sort)),
+    updateFilters: (filters) => dispatch(updateFilters(filters)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cube);
