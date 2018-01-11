@@ -1,39 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
-export default class Filter extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: this.props.name,
-            value: ''
-        };
-    }
+Filter.propTypes = {
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    onFilterChange: PropTypes.func.isRequired
+};
 
-    static propTypes = {
-        name: PropTypes.string.isRequired,
-        onFilterChange: PropTypes.func.isRequired
-    }
 
-    render() {
-        return (
-            <FormGroup>
-                <ControlLabel>{this.state.name}</ControlLabel>
-                <FormControl name={this.state.name}
-                            type="text"
-                            placeholder="Filter..."
-                            value={this.state.value}
-                            onChange={this.onChange} />
-            </FormGroup>
+export default function Filter(props) {
+    const onChange = (e) => {
+        props.onFilterChange(
+            Map({
+                name: props.name,
+                type: props.type,
+                value: e.target.value,
+            })
         );
-    }
+    };
 
-    onChange = (e) => {
-        this.setState({
-            value: e.target.value
-        });
-
-        this.props.onFilterChange(e.target.name, e.target.value);
-    }
+    return (
+        <FormGroup>
+            <ControlLabel>{props.name}</ControlLabel>
+                <FormControl name={props.name}
+                             type={props.type}
+                             placeholder="Filter..."
+                             value={props.value}
+                             onChange={onChange} />
+        </FormGroup>
+    );
 }

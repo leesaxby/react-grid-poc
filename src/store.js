@@ -3,9 +3,9 @@ import thunk from 'redux-thunk';
 // import { combineReducers } from 'redux';
 import { combineReducers } from 'redux-immutable';
 
-import cube from './modules/list';
+import { cube, filters } from './modules/list';
 
-const rootReducer = combineReducers({ cube });
+const rootReducer = combineReducers({ cube, filters });
 
 const store = createStore(
     rootReducer,

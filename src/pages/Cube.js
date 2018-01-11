@@ -1,12 +1,12 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
+import { List, Map, Seq } from 'immutable';
 import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Filter from './Cube/Filter';
 import Sort from './Cube/Sort';
-import { getList, updateSort } from '../modules/list';
+import { getList, updateSort, updateFilters } from '../modules/list';
 
 const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 
@@ -16,10 +16,12 @@ export class Cube extends PureComponent {
     }
 
     static propTypes = {
-        list: PropTypes.instanceOf(Immutable.List).isRequired,
+        list: PropTypes.instanceOf(List).isRequired,
         getList: PropTypes.func.isRequired,
-        sort: PropTypes.instanceOf(Immutable.Map).isRequired,
+        sort: PropTypes.instanceOf(Map).isRequired,
         updateSort: PropTypes.func.isRequired,
+        filters: PropTypes.instanceOf(List).isRequired,
+        updateFilters: PropTypes.func.isRequired,
     }
 
     componentWillMount = () => {
@@ -33,10 +35,7 @@ export class Cube extends PureComponent {
                     <Row>
                         <Col lg={2}>
                             <Panel header="Filters" bsStyle="primary">
-                                <Filter name="name" onFilterChange={this._handleFilter}/>
-                                <Filter name="age" onFilterChange={this._handleFilter}/>
-                                <Filter name="date" onFilterChange={this._handleFilter}/>
-                                <Filter name="random" onFilterChange={this._handleFilter}/>
+                                {this.createFilters(this.props.filters)}
                             </Panel>
                         </Col>
                         <Col lg={2}>
@@ -55,22 +54,35 @@ export class Cube extends PureComponent {
         );
     }
 
-    _handleFilter = (name, value) => {
-        let { scrollToRow } = this.state;
-        const list = this.props.list.filter(({ [name]: col }) => col.includes(value));
-
-        scrollToRow = !scrollToRow ? 1 : 0;
-
-        if (list.size && value.length >= 2) {
-        this.setState({ list,  scrollToRow });
-        }
-
-        if (!list.size || value.length === 0) {
-        this.setState({ list: this.props.list,  scrollToRow });
-        }
+    createFilters = (filters) => {
+        return filters.map(x => {
+            return (
+                <Filter key={x.get('name')}
+                        name={x.get('name')}
+                        type={x.get('type')}
+                        value={x.get('value')}
+                        onFilterChange={this.props.updateFilters}/>
+            );
+        });
     }
-
 }
+
+const filterRow = (filters = [], row = {}) => {
+    return filters
+            .reduce((arr, x) => {
+                if (x.get('value')) {
+                    arr.push(row[x.get('name')].includes(x.get('value')));
+                }
+                return arr;
+
+            }, [])
+            .every(x => x);
+};
+
+const filterList = (list, filters) => {
+    const newList = list.filter((row) => filterRow(filters, row));
+    return newList.size === 0 ? list : newList;
+};
 
 const sortList = (list, sortBy, sortDirection) => {
     // TODO: Don't want to do unnecessary initial sort.
@@ -82,17 +94,24 @@ const sortList = (list, sortBy, sortDirection) => {
 
 const mapStateToProps = (state) => {
     const cube = state.get('cube');
-    const sort = cube.get('sort');
+    const list = cube.get('list');
+    const filters = state.get('filters');
+    // const sort = cube.get('sort');
+
+
+
     return {
-        list: sortList( cube.get('list'), sort.get('sortBy'), sort.get('sortDirection') ),
-        sort: cube.get('sort')
+        list: filterList(list, filters),//sortList( cube.get('list'), sort.get('sortBy'), sort.get('sortDirection') ),
+        sort: cube.get('sort'),
+        filters: filters,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getList: () => dispatch(getList()),
-        updateSort: (sort) => dispatch(updateSort(sort))
+        updateSort: (sort) => dispatch(updateSort(sort)),
+        updateFilters: (filters) => dispatch(updateFilters(filters)),
     };
 };
 
