@@ -1,87 +1,68 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Panel, FormGroup, Radio, ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
+import Immutable from 'immutable';
 
+Sort.propTypes = {
+    sort: PropTypes.instanceOf(Immutable.Map).isRequired,
+    sortList: PropTypes.func.isRequired
+};
 
-export default class Sort extends PureComponent {
-    constructor (props) {
-        super(props);
-        this.state = {
-            sortDirection: 'ASC',
-            sortBy: 'name'
-        };
-    }
+export default function Sort(props) {
 
-    static propTypes = {
-        sortList: PropTypes.func.isRequired
-    }
+    const updateSort = (sortBy, sortDirection) => props.sortList({ sortBy, sortDirection });
 
-    render() {
-        return (
-            <Panel header="Sort" bsStyle="primary">
+    const onSortByChange = (e) => updateSort(e.target.value, props.sort.get('sortDirection'));
+
+    const onDirectionChange = (sortDirection) => updateSort(props.sort.get('sortBy'), sortDirection);
+
+    return (
+        <Panel header="Sort" bsStyle="primary">
             <FormGroup>
+                <FormGroup onChange={onSortByChange}
+                           value={props.sort.get('sortBy')}>
 
-              <FormGroup onChange={this.onSortFieldChange}
-                         value={this.state.sortBy}>
-                <Radio name="sortFieldGroup"
-                       value="index"
-                       inline>
-                  Index
-                </Radio>
-                <Radio name="sortFieldGroup"
-                       value="name"
-                       inline>
-                  Name
-                </Radio>
-                <Radio name="sortFieldGroup"
-                       value="age"
-                       inline>
-                  Age
-                </Radio>
-              </FormGroup>
+                    <Radio name="sortFieldGroup"
+                           value="index"
+                           defaultChecked={props.sort.get('sortBy') === 'index'}
+                           inline>
+                        Index
+                    </Radio>
+
+                    <Radio name="sortFieldGroup"
+                           value="name"
+                           defaultChecked={props.sort.get('sortBy') === 'name'}
+                           inline>
+                        Name
+                    </Radio>
+
+                    <Radio name="sortFieldGroup"
+                           defaultChecked={props.sort.get('sortBy') === 'age'}
+                           value="age"
+                           inline>
+                        Age
+                    </Radio>
+
+                </FormGroup>
 
                 <ToggleButtonGroup type="radio"
-                                  name="sortToggle"
-                                  role="radiogroup"
-                                  value={this.state.sortDirection}
-                                  onChange={this.onSort}>
+                                    name="sortToggle"
+                                    role="radiogroup"
+                                    value={props.sort.get('sortDirection')}
+                                    onChange={onDirectionChange}>
 
-                  <ToggleButton value="ASC"
-                                role="radio">
-                    ASC
-                  </ToggleButton>
+                    <ToggleButton value="ASC"
+                                  role="radio">
+                        ASC
+                    </ToggleButton>
 
-                  <ToggleButton value="DESC"
-                                role="radio">
-                    DESC
-                  </ToggleButton>
+                    <ToggleButton value="DESC"
+                                  role="radio">
+                        DESC
+                    </ToggleButton>
 
                 </ToggleButtonGroup>
-
             </FormGroup>
-
-          </Panel>
-        );
-    }
-
-    onSortFieldChange = (e) => {
-        const { sortDirection } = this.state;
-
-        this.setState({
-            sortDirection,
-            sortBy: e.target.value
-        });
-      }
-
-    onSort = (sortDirection) => {
-        const { sortBy } = this.state;
-
-        this.setState({
-            sortDirection,
-            sortBy
-        });
-
-        this.props.sortList( sortBy, sortDirection );
-    }
-
+        </Panel>
+    );
 }

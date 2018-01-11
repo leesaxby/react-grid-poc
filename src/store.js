@@ -1,8 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { combineReducers } from 'redux';
+// import { combineReducers } from 'redux';
+import { combineReducers } from 'redux-immutable';
 
-const rootReducer = combineReducers({ });
+import { cube, filters } from './modules/list';
+
+const rootReducer = combineReducers({ cube, filters });
 
 const store = createStore(
     rootReducer,
