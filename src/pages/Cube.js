@@ -71,7 +71,7 @@ const filterRow = (filters = [], row = {}) => {
     return filters
             .reduce((arr, x) => {
                 if (x.get('value')) {
-                    arr.push(row[x.get('name')].includes(x.get('value')));
+                    arr.push( row[ x.get('name') ].includes( x.get('value') ));
                 }
                 return arr;
 
@@ -85,7 +85,6 @@ const filterList = (list, filters) => {
 };
 
 const sortList = (list, sortBy, sortDirection) => {
-    // TODO: Don't want to do unnecessary initial sort.
     return list.sortBy(item => item[sortBy])
                .update(
                    list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
@@ -96,12 +95,13 @@ const mapStateToProps = (state) => {
     const cube = state.get('cube');
     const list = cube.get('list');
     const filters = state.get('filters');
-    // const sort = cube.get('sort');
+    const sort = cube.get('sort');
 
 
 
     return {
-        list: filterList(list, filters),//sortList( cube.get('list'), sort.get('sortBy'), sort.get('sortDirection') ),
+        // TODO: Make sure we don't perform any unnecessary sorts/filters
+        list: sortList( filterList(list, filters), sort.get('sortBy'), sort.get('sortDirection') ),
         sort: cube.get('sort'),
         filters: filters,
     };
