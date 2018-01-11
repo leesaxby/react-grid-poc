@@ -77,7 +77,7 @@ export default class GridTable extends PureComponent {
                                           overscanColumnCount={overscanColumnCount}
                                           overscanRowCount={overscanRowCount}
                                           rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
-                                          rowCount={rowCount}
+                                          rowCount={this.props.list.size}
                                           width={width}/>
                                 </div>
                             </div>
