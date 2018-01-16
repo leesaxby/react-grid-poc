@@ -16,8 +16,8 @@ export default class GridTable extends PureComponent {
             overscanRowCount: 10,
             rowHeight: 40,
             rowCount: 1000000,
-            scrollToColumn: undefined,
-            useDynamicRowHeight: false
+            useDynamicRowHeight: false,
+            scrollToRow: 0,
         };
     }
 
@@ -34,6 +34,7 @@ export default class GridTable extends PureComponent {
             overscanRowCount,
             rowHeight,
             useDynamicRowHeight,
+            scrollToRow,
         } = this.state;
 
         return (
@@ -72,6 +73,7 @@ export default class GridTable extends PureComponent {
                                           columnWidth={this._getColumnWidth}
                                           columnCount={columnCount}
                                           onScroll={onScroll}
+                                          scrollToRow={scrollToRow}
                                           height={height}
                                           noContentRenderer={this._noContentRenderer}
                                           overscanColumnCount={overscanColumnCount}
@@ -87,6 +89,14 @@ export default class GridTable extends PureComponent {
                 }}
             </ScrollSync>
         );
+    }
+
+    // Manually updating rows to fire grid update.
+    // TODO: Grid doesn't auto update on sort
+    updateScrollToRow = () => {
+        this.setState({
+            scrollToRow: this.state.scrollToRow ? 0 : 1
+        });
     }
 
     _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
@@ -112,6 +122,7 @@ export default class GridTable extends PureComponent {
     _onColummSelect = (index) => {
         const sortBy = Object.keys(this.props.list.get(0))[index];
         this.props.onSort({ sortBy });
+        this.updateScrollToRow();
     }
 
     _getColumnWidth = ({index}) => {
