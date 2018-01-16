@@ -11,21 +11,32 @@ const filterRow = (filters = [], row = {}) => {
 
 const getList = (state) => state.get('cube').get('list');
 
+const getSort = (state) => state.get('cube').get('sort');
+
 const getFilters = (state) => state.get('filters');
 
 const getFilteredList = createSelector(
     [getList, getFilters],
     (list, filters) => {
         const activeFilters = filters.filter(f => f);
+        return !activeFilters.size ? list : list.filter((row) => filterRow(activeFilters , row));
+    }
+);
 
-        if (!activeFilters.size) {
-            return list;
-        }
+const getSortedList = createSelector(
+    [getSort, getFilteredList],
+    (sort, filteredList) => {
+        const sortBy = sort.get('sortBy');
+        const sortDirection = sort.get('sortDirection');
 
-        return list.filter((row) => filterRow(activeFilters , row));
+        return filteredList.sortBy(item => item[sortBy])
+                   .update(
+                       list => (sortDirection === 'DESC' ? list.reverse() : list),
+                   );
     }
 );
 
 export {
     getFilteredList,
+    getSortedList,
 };

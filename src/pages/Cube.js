@@ -7,9 +7,7 @@ import GridTable from './Cube/GridTable';
 import Filter from './Cube/Filter';
 import Sort from './Cube/Sort';
 import { generateList, updateSort, updateFilters } from '../modules/list';
-import { getFilteredList } from '../modules/list.selectors';
-
-const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
+import { getSortedList } from '../modules/list.selectors';
 
 export class Cube extends PureComponent {
     constructor(props, context) {
@@ -68,24 +66,11 @@ export class Cube extends PureComponent {
     }
 }
 
-
-
-const sortList = (list, sortBy, sortDirection) => {
-    return list.sortBy(item => item[sortBy])
-               .update(
-                   list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
-               );
-};
-
-const mapStateToProps = (state) => {
-    const cube = state.get('cube');
-    const filters = state.get('filters');
-    return {
-        list: getFilteredList(state),
-        sort: cube.get('sort'),
-        filters: filters,
-    };
-};
+const mapStateToProps = (state) => ({
+    list: getSortedList(state),
+    sort: state.get('cube').get('sort'),
+    filters: state.get('filters'),
+});
 
 const mapDispatchToProps = (dispatch) => ({
     generateList: () => dispatch(generateList()),
