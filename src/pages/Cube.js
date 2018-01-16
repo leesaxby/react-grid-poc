@@ -2,10 +2,9 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
-import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
+import { Grid as GridStyle, Row, Col, Panel} from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Filter from './Cube/Filter';
-import Sort from './Cube/Sort';
 import { generateList, updateSort, updateFilters } from '../modules/list';
 import { getSortedList } from '../modules/list.selectors';
 
@@ -37,15 +36,11 @@ export class Cube extends PureComponent {
                                 {this.createFilters(this.props.filters)}
                             </Panel>
                         </Col>
-                        <Col lg={2}>
-                        <Sort sort={this.props.sort}
-                              sortList={this.props.updateSort}/>
-
-                        </Col>
                     </Row>
                     <Row>
                         <Col lg={12}>
                             <GridTable list={this.props.list}
+                                       sort={this.props.sort}
                                        onSort={this.props.updateSort}/>
                         </Col>
                     </Row>
