@@ -22,7 +22,8 @@ export default class GridTable extends PureComponent {
     }
 
     static propTypes = {
-        list: PropTypes.instanceOf(Immutable.List).isRequired
+        list: PropTypes.instanceOf(Immutable.List).isRequired,
+        onSort: PropTypes.func.isRequired,
     }
 
     render() {
@@ -102,21 +103,15 @@ export default class GridTable extends PureComponent {
 
     _renderLeftHeaderCell = ({columnIndex, key, style}) => {
         return (
-          <div className={styles.headerCell} key={key} style={style}>
+          <div onClick={() => {this._onColummSelect(columnIndex);}} className={styles.headerCell} key={key} style={style}>
             { this._getHeaderText(columnIndex) }
           </div>
         );
     }
 
     _onColummSelect = (index) => {
-        const { sortDirection } = this.state.sort;
-        const selectedColName = Object.keys(this.props.list.get(0))[index];
-        this.setState({
-            sort: {
-                sortDirection,
-                sortBy: selectedColName
-            }
-        });
+        const sortBy = Object.keys(this.props.list.get(0))[index];
+        this.props.onSort({ sortBy });
     }
 
     _getColumnWidth = ({index}) => {
@@ -197,7 +192,7 @@ export default class GridTable extends PureComponent {
             });
 
             return (
-                <div onClick={() => {this._onColummSelect(columnIndex);}} className={classNames} key={key} style={style}>
+                <div className={classNames} key={key} style={style}>
                     {content}
                 </div>
             );

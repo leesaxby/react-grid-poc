@@ -55,8 +55,14 @@ const cube = (state = initialCubeState, action) => {
     switch (action.type) {
         case GENERATE_LIST_SUCCESS:
             return state.set('list', List(action.payload));
-        case UPDATE_SORT:
-            return state.set('sort', Map(action.payload));
+        case UPDATE_SORT: {
+            const sort = state.get('sort');
+            const sortDirection = sort.get('sortDirection') === 'DESC' ? 'ASC' : 'DESC';
+
+            return state.set('sort',
+                Map( Object.assign({}, action.payload, { sortDirection }) )
+            );
+        }
         default:
             return state;
     }

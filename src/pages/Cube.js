@@ -45,7 +45,8 @@ export class Cube extends PureComponent {
                     </Row>
                     <Row>
                         <Col lg={12}>
-                            <GridTable list={this.props.list}/>
+                            <GridTable list={this.props.list}
+                                       onSort={this.props.updateSort}/>
                         </Col>
                     </Row>
                 </GridStyle>
