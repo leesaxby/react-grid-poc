@@ -32,7 +32,8 @@
     "react-virtualized": "^9.13.0",
     "redux": "^3.7.2",
     "redux-immutable": "^4.0.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

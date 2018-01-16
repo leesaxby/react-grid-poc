@@ -1,17 +1,17 @@
 import { List, Map } from 'immutable';
 import { generateRandomList } from '../utils';
 
-const GET_LIST = 'app/cube/GET_LIST';
-const GET_LIST_SUCCESS = 'app/cube/GET_LIST_SUCCESS';
+const GENERATE_LIST = 'app/cube/GENERATE_LIST';
+const GENERATE_LIST_SUCCESS = 'app/cube/GENERATE_LIST_SUCCESS';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
 const UPDATE_FILTERS = 'app/cube/UPDATE_FILTERS';
 
-const getListSuccess = () => ({
-    type: GET_LIST_SUCCESS,
+const generateListSuccess = () => ({
+    type: GENERATE_LIST_SUCCESS,
     payload: generateRandomList()
 });
 
-const getList = () => getListSuccess();
+const generateList = () => generateListSuccess();
 
 const updateSort = (sort) => ({
     type: UPDATE_SORT,
@@ -53,7 +53,7 @@ const initialFilterState = List([
 
 const cube = (state = initialCubeState, action) => {
     switch (action.type) {
-        case GET_LIST_SUCCESS:
+        case GENERATE_LIST_SUCCESS:
             return state.set('list', List(action.payload));
         case UPDATE_SORT:
             return state.set('sort', Map(action.payload));
@@ -77,11 +77,11 @@ const filters = (state = initialFilterState, action) => {
 };
 
 export {
-    GET_LIST,
-    GET_LIST_SUCCESS,
+    GENERATE_LIST,
+    GENERATE_LIST_SUCCESS,
     UPDATE_SORT,
     UPDATE_FILTERS,
-    getList,
+    generateList,
     updateSort,
     updateFilters,
     cube,

@@ -6,7 +6,8 @@ import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Filter from './Cube/Filter';
 import Sort from './Cube/Sort';
-import { getList, updateSort, updateFilters } from '../modules/list';
+import { generateList, updateSort, updateFilters } from '../modules/list';
+import { getFilteredList } from '../modules/list.selectors';
 
 const SortDirection = {ASC: 'ASC', DESC: 'DESC'};
 
@@ -17,7 +18,7 @@ export class Cube extends PureComponent {
 
     static propTypes = {
         list: PropTypes.instanceOf(List).isRequired,
-        getList: PropTypes.func.isRequired,
+        generateList: PropTypes.func.isRequired,
         sort: PropTypes.instanceOf(Map).isRequired,
         updateSort: PropTypes.func.isRequired,
         filters: PropTypes.instanceOf(List).isRequired,
@@ -25,7 +26,7 @@ export class Cube extends PureComponent {
     }
 
     componentWillMount = () => {
-        this.props.getList();
+        this.props.generateList();
     }
 
     render() {
@@ -67,24 +68,7 @@ export class Cube extends PureComponent {
     }
 }
 
-const filterRow = (filters = [], row = {}) => {
-    return filters
-            .reduce((arr, x) => {
-                arr.push( row[ x.get('name') ].includes( x.get('value') ));
-                return arr;
-            }, [])
-            .every(x => x);
-};
 
-const filterList = (list, filters) => {
-    const activeFilters = filters.filter(f => f);
-
-    if (!activeFilters.size) {
-        return list;
-    }
-
-    return list.filter((row) => filterRow(activeFilters , row));
-};
 
 const sortList = (list, sortBy, sortDirection) => {
     return list.sortBy(item => item[sortBy])
@@ -95,20 +79,16 @@ const sortList = (list, sortBy, sortDirection) => {
 
 const mapStateToProps = (state) => {
     const cube = state.get('cube');
-    const list = cube.get('list');
     const filters = state.get('filters');
-    const sort = cube.get('sort');
-
     return {
-        // TODO: Make sure we don't perform any unnecessary sorts/filters
-        list: sortList( filterList(list, filters), sort.get('sortBy'), sort.get('sortDirection') ),
+        list: getFilteredList(state),
         sort: cube.get('sort'),
         filters: filters,
     };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    getList: () => dispatch(getList()),
+    generateList: () => dispatch(generateList()),
     updateSort: (sort) => dispatch(updateSort(sort)),
     updateFilters: (filters) => dispatch(updateFilters(filters)),
 });
