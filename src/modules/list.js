@@ -1,17 +1,23 @@
 import { List, Map } from 'immutable';
-import { generateRandomList } from '../utils';
 
 const GENERATE_LIST = 'app/cube/GENERATE_LIST';
 const GENERATE_LIST_SUCCESS = 'app/cube/GENERATE_LIST_SUCCESS';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
 const UPDATE_FILTERS = 'app/cube/UPDATE_FILTERS';
 
-const generateListSuccess = () => ({
+const generateListSuccess = (list) => ({
     type: GENERATE_LIST_SUCCESS,
-    payload: generateRandomList()
+    payload: list
 });
 
-const generateList = () => generateListSuccess();
+const generateList = () => {
+    return dispatch => {
+        fetch('http://localhost:3000')
+            .then(res => res.json())
+            .then(list => dispatch(generateListSuccess(list)))
+            .catch(err => console.log(err));
+    };
+};
 
 const updateSort = (sort) => ({
     type: UPDATE_SORT,
