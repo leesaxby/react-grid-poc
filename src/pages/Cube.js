@@ -63,7 +63,7 @@ export class Cube extends PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: getSortedList(state),
+    list: state.get('cube').get('list'),//getSortedList(state),
     sort: state.get('cube').get('sort'),
     filters: state.get('filters'),
 });

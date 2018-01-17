@@ -1,21 +1,19 @@
 import { List, Map } from 'immutable';
+import Worker from './list.worker';
 
-const GENERATE_LIST = 'app/cube/GENERATE_LIST';
-const GENERATE_LIST_SUCCESS = 'app/cube/GENERATE_LIST_SUCCESS';
+const ADD_ITEM = 'app/cube/ADD_ITEM';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
 const UPDATE_FILTERS = 'app/cube/UPDATE_FILTERS';
 
-const generateListSuccess = (list) => ({
-    type: GENERATE_LIST_SUCCESS,
-    payload: list
+const addItem = (item) => ({
+    type: ADD_ITEM,
+    payload: item
 });
 
 const generateList = () => {
     return dispatch => {
-        fetch('http://localhost:3000')
-            .then(res => res.json())
-            .then(list => dispatch(generateListSuccess(list)))
-            .catch(err => console.log(err));
+        const worker = new Worker();
+        worker.addEventListener('message', e => dispatch(addItem(e.data.list)));
     };
 };
 
@@ -59,8 +57,8 @@ const initialFilterState = List([
 
 const cube = (state = initialCubeState, action) => {
     switch (action.type) {
-        case GENERATE_LIST_SUCCESS:
-            return state.set('list', List(action.payload));
+        case ADD_ITEM:
+            return state.set('list', state.get('list').concat(action.payload));
         case UPDATE_SORT: {
             const sort = state.get('sort');
             const sortDirection = sort.get('sortDirection') === 'DESC' ? 'ASC' : 'DESC';
@@ -89,10 +87,10 @@ const filters = (state = initialFilterState, action) => {
 };
 
 export {
-    GENERATE_LIST,
-    GENERATE_LIST_SUCCESS,
+    ADD_ITEM,
     UPDATE_SORT,
     UPDATE_FILTERS,
+    addItem,
     generateList,
     updateSort,
     updateFilters,
