@@ -16,13 +16,14 @@ export default class GridTable extends PureComponent {
             overscanRowCount: 10,
             rowHeight: 40,
             rowCount: 1000000,
-            scrollToColumn: undefined,
-            useDynamicRowHeight: false
+            useDynamicRowHeight: false,
+            scrollToRow: 0,
         };
     }
 
     static propTypes = {
-        list: PropTypes.instanceOf(Immutable.List).isRequired
+        list: PropTypes.instanceOf(Immutable.List).isRequired,
+        onSort: PropTypes.func.isRequired,
     }
 
     render() {
@@ -33,6 +34,7 @@ export default class GridTable extends PureComponent {
             overscanRowCount,
             rowHeight,
             useDynamicRowHeight,
+            scrollToRow,
         } = this.state;
 
         return (
@@ -71,6 +73,7 @@ export default class GridTable extends PureComponent {
                                           columnWidth={this._getColumnWidth}
                                           columnCount={columnCount}
                                           onScroll={onScroll}
+                                          scrollToRow={scrollToRow}
                                           height={height}
                                           noContentRenderer={this._noContentRenderer}
                                           overscanColumnCount={overscanColumnCount}
@@ -88,6 +91,14 @@ export default class GridTable extends PureComponent {
         );
     }
 
+    // Manually updating rows to fire grid update.
+    // TODO: Grid doesn't auto update on sort
+    updateScrollToRow = () => {
+        this.setState({
+            scrollToRow: this.state.scrollToRow ? 0 : 1
+        });
+    }
+
     _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
         return this._renderBodyCell({columnIndex, key, rowIndex, style});
     }
@@ -102,21 +113,16 @@ export default class GridTable extends PureComponent {
 
     _renderLeftHeaderCell = ({columnIndex, key, style}) => {
         return (
-          <div className={styles.headerCell} key={key} style={style}>
+          <div onClick={() => {this._onColummSelect(columnIndex);}} className={styles.headerCell} key={key} style={style}>
             { this._getHeaderText(columnIndex) }
           </div>
         );
     }
 
     _onColummSelect = (index) => {
-        const { sortDirection } = this.state.sort;
-        const selectedColName = Object.keys(this.props.list.get(0))[index];
-        this.setState({
-            sort: {
-                sortDirection,
-                sortBy: selectedColName
-            }
-        });
+        const sortBy = Object.keys(this.props.list.get(0))[index];
+        this.props.onSort({ sortBy });
+        this.updateScrollToRow();
     }
 
     _getColumnWidth = ({index}) => {
@@ -197,7 +203,7 @@ export default class GridTable extends PureComponent {
             });
 
             return (
-                <div onClick={() => {this._onColummSelect(columnIndex);}} className={classNames} key={key} style={style}>
+                <div className={classNames} key={key} style={style}>
                     {content}
                 </div>
             );
