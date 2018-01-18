@@ -4,7 +4,7 @@
 module.exports = function() {
   const list = [];
 
-  for (var i = 0; i < 550000; i++) {
+  for (var i = 0; i < 520000; i++) {
     list.push({
       index: i,
       name: NAMES[(Math.round(Math.random() * NAMES.length) % NAMES.length)],
