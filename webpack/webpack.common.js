@@ -29,8 +29,10 @@ module.exports = {
             test: /\.css$/,
             loaders: ['style-loader', 'css-loader?importLoaders=1&minimize=false'],
             include: path.join(__dirname, '../src/theme.css')
-          },
-        {
+        },{
+            test: /\.worker\.js$/,
+            use: { loader: 'worker-loader' }
+        },{
             test: /\.(png|svg|jpg|gif)$/,
             use: [
                 'file-loader',

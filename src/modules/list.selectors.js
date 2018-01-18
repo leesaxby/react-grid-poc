@@ -18,7 +18,7 @@ const getFilters = (state) => state.get('filters');
 const getFilteredList = createSelector(
     [getList, getFilters],
     (list, filters) => {
-        const activeFilters = filters.filter(f => f);
+        const activeFilters = filters.filter(f => f.get('value'));
         return !activeFilters.size ? list : list.filter((row) => filterRow(activeFilters , row));
     }
 );
@@ -28,6 +28,10 @@ const getSortedList = createSelector(
     (sort, filteredList) => {
         const sortBy = sort.get('sortBy');
         const sortDirection = sort.get('sortDirection');
+
+        if (!sortBy || !sortDirection) {
+            return filteredList;
+        }
 
         return filteredList.sortBy(item => item[sortBy])
                    .update(

@@ -1,10 +1,10 @@
 /**
  * Generate random data for use in examples.
  */
-export function generateRandomList() {
+module.exports = function() {
   const list = [];
 
-  for (var i = 0; i < 1000000; i++) {
+  for (var i = 0; i < 520000; i++) {
     list.push({
       index: i,
       name: NAMES[(Math.round(Math.random() * NAMES.length) % NAMES.length)],
@@ -21,7 +21,7 @@ export function generateRandomList() {
     });
   }
 
-  return list;
+  return { list };
 }
 
 const getRandomData = (list) => list[(Math.round(Math.random() * list.length) % list.length)];
