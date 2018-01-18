@@ -29,7 +29,7 @@ const updateFilters = (filters) => ({
 
 const initialCubeState = Map({
     list: List(),
-    sort: Map({ sortBy: 'index', sortDirection: 'ASC'}),
+    sort: Map({ sortBy: '', sortDirection: ''}),
 });
 
 const initialFilterState = List([
