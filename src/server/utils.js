@@ -3,9 +3,9 @@
  */
 module.exports = function() {
   const list = [];
-  const totalCount = 520000;
+  const total = 520000;
 
-  for (var i = 0; i < totalCount; i++) {
+  for (var i = 0; i < total; i++) {
     list.push({
       index: i,
       name: NAMES[(Math.round(Math.random() * NAMES.length) % NAMES.length)],
@@ -22,7 +22,7 @@ module.exports = function() {
     });
   }
 
-  return { list, totalCount };
+  return { list, total };
 };
 
 const getRandomData = (list) => list[(Math.round(Math.random() * list.length) % list.length)];
