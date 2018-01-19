@@ -9,18 +9,21 @@ Status.propTypes = {
 };
 
 export default function Status(props) {
+    const loadComplete = () => props.listSize === props.total;
+
     return (
         <div>
-            <Alert style={{ marginBottom: '10px' }}>
-                <strong>Total: </strong>
-                <FormattedNumber value={props.total}/>
-            </Alert>
-            <Alert style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px'}}>
                 <strong>Loaded: </strong>
                 <FormattedNumber value={props.listSize}/>
-            </Alert>
-            <Alert bsStyle="success" style={{ marginBottom: '0px', textAlign: 'center' }}>
-                <strong>Loading Records</strong>
+            </div>
+            <div  style={{ marginBottom: '10px' }}>
+                <strong>Total: </strong>
+                <FormattedNumber value={props.total}/>
+            </div>
+            <Alert bsStyle={loadComplete() ? 'success' : 'info'}
+                   style={{ marginBottom: '0px', textAlign: 'center' }}>
+                <strong>{loadComplete() ? 'Complete' : 'Loading Records'}</strong>
             </Alert>
         </div>
     );
