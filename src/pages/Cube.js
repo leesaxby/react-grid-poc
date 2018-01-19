@@ -16,6 +16,7 @@ export class Cube extends PureComponent {
 
     static propTypes = {
         list: PropTypes.instanceOf(List).isRequired,
+        totalListSize: PropTypes.number.isRequired,
         status: PropTypes.instanceOf(Map).isRequired,
         generateList: PropTypes.func.isRequired,
         sort: PropTypes.instanceOf(Map).isRequired,
@@ -40,7 +41,7 @@ export class Cube extends PureComponent {
                         </Col>
                         <Col lg={3}>
                             <Panel header="Status" bsStyle="primary">
-                                <Status listSize={this.props.list.size}
+                                <Status listSize={this.props.totalListSize}
                                         total={this.props.status.get('total')}/>
                             </Panel>
                         </Col>
@@ -72,6 +73,7 @@ export class Cube extends PureComponent {
 
 const mapStateToProps = (state) => ({
     list: getSortedList(state),
+    totalListSize: state.get('cube').get('list').size,
     status: state.get('cube').get('status'),
     sort: state.get('cube').get('sort'),
     filters: state.get('filters'),
