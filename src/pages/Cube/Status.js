@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert } from 'react-bootstrap';
+import { Alert, ProgressBar } from 'react-bootstrap';
 import { FormattedNumber } from 'react-intl';
 
 Status.propTypes = {
@@ -9,22 +9,30 @@ Status.propTypes = {
 };
 
 export default function Status(props) {
-    const loadComplete = () => props.listSize === props.total;
+    const loadComplete = () => progress() === 100;
+    const progress = () => props.listSize / props.total * 100;
 
     return (
         <div>
             <div style={{ marginBottom: '10px'}}>
-                <strong>Loaded: </strong>
+                <strong>Records: </strong>
                 <FormattedNumber value={props.listSize}/>
-            </div>
-            <div  style={{ marginBottom: '10px' }}>
-                <strong>Total: </strong>
+                <strong> / </strong>
                 <FormattedNumber value={props.total}/>
             </div>
-            <Alert bsStyle={loadComplete() ? 'success' : 'info'}
-                   style={{ marginBottom: '0px', textAlign: 'center' }}>
-                <strong>{loadComplete() ? 'Complete' : 'Loading Records'}</strong>
-            </Alert>
+            {
+                loadComplete() ?
+                    <Alert bsStyle={loadComplete() ? 'success' : 'info'}
+                           style={{ marginBottom: '0px', textAlign: 'center' }}>
+                        <strong>{loadComplete() ? 'Complete' : 'Loading Records'}</strong>
+                    </Alert>
+                :
+                    <ProgressBar style={{ marginTop: '10px', marginBottom: '0px' }}
+                                 bsStyle="success"
+                                 now={progress()} />
+            }
+
+
         </div>
     );
 }

@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
-import { Grid as GridStyle, Row, Col, Panel} from 'react-bootstrap';
+import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Status from './Cube/Status';
 import Filter from './Cube/Filter';
@@ -38,7 +38,7 @@ export class Cube extends PureComponent {
                                 {this.createFilters(this.props.filters)}
                             </Panel>
                         </Col>
-                        <Col lg={2}>
+                        <Col lg={3}>
                             <Panel header="Status" bsStyle="primary">
                                 <Status listSize={this.props.list.size}
                                         total={this.props.status.get('total')}/>
