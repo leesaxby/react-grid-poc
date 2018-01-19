@@ -3,7 +3,7 @@ import oboe from 'oboe';
 let myList = [];
 let chunkCount = 20000;
 
-oboe('http://localhost:3000')
+oboe('http://localhost:3000/list')
     .node('list.*', res => {
         myList.push(res);
 

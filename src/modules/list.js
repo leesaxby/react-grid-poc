@@ -1,21 +1,21 @@
 import { List, Map } from 'immutable';
+import oboe from 'oboe';
 import Worker from './list.worker';
 
 const ADD_ITEM = 'app/cube/ADD_ITEM';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
 const UPDATE_FILTERS = 'app/cube/UPDATE_FILTERS';
+const UPDATE_TOTAL = 'app/cube/UPDATE_TOTAL';
 
 const addItem = (item) => ({
     type: ADD_ITEM,
     payload: item
 });
 
-const generateList = () => {
-    return dispatch => {
-        const worker = new Worker();
-        worker.addEventListener('message', e => dispatch(addItem(e.data.list)));
-    };
-};
+const updateTotal = (total) => ({
+    type: UPDATE_TOTAL,
+    payload: total
+});
 
 const updateSort = (sort) => ({
     type: UPDATE_SORT,
@@ -27,8 +27,22 @@ const updateFilters = (filters) => ({
     payload: filters
 });
 
+const generateList = () => {
+    return dispatch => {
+        oboe('http://localhost:3000/total')
+            .done((res) => dispatch(updateTotal(res)))
+            .fail(err => console.log(err));
+
+        const worker = new Worker();
+        worker.addEventListener('message', e => dispatch(addItem(e.data.list)));
+    };
+};
+
 const initialCubeState = Map({
     list: List(),
+    status: Map({
+        total: 0
+    }),
     sort: Map({ sortBy: '', sortDirection: ''}),
 });
 
@@ -67,6 +81,10 @@ const cube = (state = initialCubeState, action) => {
                 Map( Object.assign({}, action.payload, { sortDirection }) )
             );
         }
+        case UPDATE_TOTAL:
+            return state.set('status',
+                Map( Object.assign({}, action.payload) )
+            );
         default:
             return state;
     }

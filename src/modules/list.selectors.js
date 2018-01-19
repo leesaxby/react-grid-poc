@@ -29,6 +29,8 @@ const getSortedList = createSelector(
         const sortBy = sort.get('sortBy');
         const sortDirection = sort.get('sortDirection');
 
+        // Initial sort state is blank to avoid sorting when initialy
+        // importing data.
         if (!sortBy || !sortDirection) {
             return filteredList;
         }
