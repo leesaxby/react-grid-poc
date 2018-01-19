@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { Grid as GridStyle, Row, Col, Panel} from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
+import Status from './Cube/Status';
 import Filter from './Cube/Filter';
 import { generateList, updateSort, updateFilters } from '../modules/list';
 import { getSortedList } from '../modules/list.selectors';
@@ -15,6 +16,7 @@ export class Cube extends PureComponent {
 
     static propTypes = {
         list: PropTypes.instanceOf(List).isRequired,
+        status: PropTypes.instanceOf(Map).isRequired,
         generateList: PropTypes.func.isRequired,
         sort: PropTypes.instanceOf(Map).isRequired,
         updateSort: PropTypes.func.isRequired,
@@ -34,6 +36,12 @@ export class Cube extends PureComponent {
                         <Col lg={2}>
                             <Panel header="Filters" bsStyle="primary">
                                 {this.createFilters(this.props.filters)}
+                            </Panel>
+                        </Col>
+                        <Col lg={2}>
+                            <Panel header="Status" bsStyle="primary">
+                                <Status listSize={this.props.list.size}
+                                        total={this.props.status.get('total')}/>
                             </Panel>
                         </Col>
                     </Row>
@@ -64,6 +72,7 @@ export class Cube extends PureComponent {
 
 const mapStateToProps = (state) => ({
     list: getSortedList(state),
+    status: state.get('cube').get('status'),
     sort: state.get('cube').get('sort'),
     filters: state.get('filters'),
 });

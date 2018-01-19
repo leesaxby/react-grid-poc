@@ -29,6 +29,9 @@ const updateFilters = (filters) => ({
 
 const initialCubeState = Map({
     list: List(),
+    status: Map({
+        total: 0
+    }),
     sort: Map({ sortBy: '', sortDirection: ''}),
 });
 

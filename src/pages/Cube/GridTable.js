@@ -48,7 +48,6 @@ export default class GridTable extends PureComponent {
                         <AutoSizer disableHeight>
                             {({width}) => (
                             <div>
-                                Count: {this.props.list.size}
                                 <div
                                     style={{
                                         backgroundColor: '#337ab7',
