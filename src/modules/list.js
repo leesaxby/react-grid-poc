@@ -1,6 +1,7 @@
 import { List, Map } from 'immutable';
 import oboe from 'oboe';
 import Worker from './list.worker';
+import TestWorker from './test.worker';
 
 const ADD_ITEM = 'app/cube/ADD_ITEM';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
@@ -40,7 +41,10 @@ const generateList = () => {
             .fail(err => console.log(err));
 
         const worker = new Worker();
-        worker.addEventListener('message', e => dispatch(addItem(e.data.list)));
+        worker.addEventListener('message', e => {
+            const data = JSON.parse(e.data);
+            dispatch(addItem(data.list));
+        });
     };
 };
 

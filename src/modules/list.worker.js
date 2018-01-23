@@ -8,7 +8,7 @@ oboe('http://localhost:3000/list')
         myList.push(res);
 
         if ( (myList.length % chunkCount) === 0 ) {
-           self.postMessage({ list: myList });
+           self.postMessage(JSON.stringify({ list: myList }));
            myList.length = 0;
            chunkCount = 100000;
         }
