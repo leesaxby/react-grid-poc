@@ -24,6 +24,7 @@ export default class GridTable extends PureComponent {
     static propTypes = {
         list: PropTypes.instanceOf(Immutable.List).isRequired,
         onSort: PropTypes.func.isRequired,
+        onUpdateRecord: PropTypes.func.isRequired,
     }
 
     render() {
@@ -99,6 +100,15 @@ export default class GridTable extends PureComponent {
         });
     }
 
+    updateRecord = (index, field, e) => {
+        this.props.onUpdateRecord({
+            updateIndex: index,
+            field,
+            value: e.target.value
+        });
+        this.updateScrollToRow();
+    }
+
     _cellRenderer = ({columnIndex, key, rowIndex, style}) => {
         return this._renderBodyCell({columnIndex, key, rowIndex, style});
     }
@@ -170,28 +180,28 @@ export default class GridTable extends PureComponent {
                     content = datum.index;
                     break;
                 case 1:
-                    content = datum.name;
+                    content = this._getEditableRow(datum.index, datum.name, 'name');
                     break;
                 case 2:
-                    content = datum.otherNames;
+                    content = this._getEditableRow(datum.index, datum.otherNames, 'otherNames');
                     break;
                 case 3:
-                    content = datum.age;
+                    content = this._getEditableRow(datum.index, datum.age, 'age');
                     break;
                 case 4:
-                    content = datum.date;
+                    content = this._getEditableRow(datum.index, datum.date, 'date');
                     break;
                 case 5:
-                    content = datum.random2;
+                    content = this._getEditableRow(datum.index, datum.random2, 'random2');
                     break;
                 case 6:
-                    content = datum.random3;
+                    content = this._getEditableRow(datum.index, datum.random3, 'random3');
                    break;
                 case 7:
-                    content = datum.random4;
+                    content = this._getEditableRow(datum.index, datum.random4, 'random4');
                     break;
                 case 8:
-                    content = datum.random5;
+                    content = this._getEditableRow(datum.index, datum.random5, 'random5');
                     break;
                 default:
                     content = datum.random;
@@ -208,6 +218,21 @@ export default class GridTable extends PureComponent {
                 </div>
             );
         }
+    }
+
+    _getEditableRow = (index, data, field) => {
+        return (
+            <input type="text"
+                   value={data}
+                   // TODO: Better way than anon fn below.
+                   onChange={(e) => {this.updateRecord(index, field, e);}}
+                   style={{
+                       width: '100%',
+                       border: '0px',
+                       background: 'none',
+                       outline: 'none',
+                   }}/>
+        );
     }
 
     _getHeaderText = (colIndex) => {
