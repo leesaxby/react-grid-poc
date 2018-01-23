@@ -6,7 +6,7 @@ import { Grid as GridStyle, Row, Col, Panel } from 'react-bootstrap';
 import GridTable from './Cube/GridTable';
 import Status from './Cube/Status';
 import Filter from './Cube/Filter';
-import { generateList, updateSort, updateFilters } from '../modules/list';
+import { generateList, updateSort, updateFilters, updateRecord } from '../modules/list';
 import { getSortedList } from '../modules/list.selectors';
 
 export class Cube extends PureComponent {
@@ -23,6 +23,7 @@ export class Cube extends PureComponent {
         updateSort: PropTypes.func.isRequired,
         filters: PropTypes.instanceOf(List).isRequired,
         updateFilters: PropTypes.func.isRequired,
+        updateRecord: PropTypes.func.isRequired,
     }
 
     componentWillMount = () => {
@@ -50,7 +51,8 @@ export class Cube extends PureComponent {
                         <Col lg={12}>
                             <GridTable list={this.props.list}
                                        sort={this.props.sort}
-                                       onSort={this.props.updateSort}/>
+                                       onSort={this.props.updateSort}
+                                       onUpdateRecord={this.props.updateRecord}/>
                         </Col>
                     </Row>
                 </GridStyle>
@@ -81,8 +83,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     generateList: () => dispatch(generateList()),
-    updateSort: (sort) => dispatch(updateSort(sort)),
-    updateFilters: (filters) => dispatch(updateFilters(filters)),
+    updateSort: sort => dispatch(updateSort(sort)),
+    updateFilters: filters => dispatch(updateFilters(filters)),
+    updateRecord: text => dispatch(updateRecord(text)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cube);
