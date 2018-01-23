@@ -6,6 +6,7 @@ const ADD_ITEM = 'app/cube/ADD_ITEM';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
 const UPDATE_FILTERS = 'app/cube/UPDATE_FILTERS';
 const UPDATE_TOTAL = 'app/cube/UPDATE_TOTAL';
+const UPDATE_RECORD = 'app/cube/UPDATE_RECORD';
 
 const addItem = (item) => ({
     type: ADD_ITEM,
@@ -25,6 +26,11 @@ const updateSort = (sort) => ({
 const updateFilters = (filters) => ({
     type: UPDATE_FILTERS,
     payload: filters
+});
+
+const updateRecord = (record) => ({
+    type: UPDATE_RECORD,
+    payload: record
 });
 
 const generateList = () => {
@@ -85,6 +91,12 @@ const cube = (state = initialCubeState, action) => {
             return state.set('status',
                 Map( Object.assign({}, action.payload) )
             );
+        case UPDATE_RECORD: {
+            const { updateIndex, field, value } = action.payload;
+            const list = state.get('list');
+            const updated = list.set(updateIndex, Object.assign({}, list.get(updateIndex), { [field]: value }));
+            return state.set('list', updated);
+        }
         default:
             return state;
     }
@@ -112,6 +124,7 @@ export {
     generateList,
     updateSort,
     updateFilters,
+    updateRecord,
     cube,
     filters,
 };
