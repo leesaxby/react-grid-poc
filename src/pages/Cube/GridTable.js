@@ -230,6 +230,7 @@ export default class GridTable extends PureComponent {
                        width: '100%',
                        border: '0px',
                        background: 'none',
+                       outline: 'none',
                    }}/>
         );
     }
