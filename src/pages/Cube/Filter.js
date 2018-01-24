@@ -5,9 +5,7 @@ import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 export default class Filter extends React.Component {
     static propTypes = {
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired,
+        filter: PropTypes.instanceOf(Map).isRequired,
         onFilterChange: PropTypes.func.isRequired
     };
 
@@ -15,15 +13,15 @@ export default class Filter extends React.Component {
         super(props);
         this.timeout;
         this.state = {
-            value: this.props.value
+            value: this.props.filter.get('value')
         };
     }
 
     updateFilter = (value) => {
         this.props.onFilterChange(
-            Map({
-                name: this.props.name,
-                type: this.props.type,
+            this.props.filter.merge({
+                field: this.props.filter.get('field'),
+                type: this.props.filter.get('type'),
                 value: value,
             })
         );
@@ -42,11 +40,12 @@ export default class Filter extends React.Component {
     };
 
     render() {
+        const filter = this.props.filter;
         return (
             <FormGroup>
-                <ControlLabel>{this.props.name}</ControlLabel>
-                    <FormControl name={this.props.name}
-                                 type={this.props.type}
+                <ControlLabel>{filter.get('label')}</ControlLabel>
+                    <FormControl name={filter.get('label')}
+                                 type={filter.get('type')}
                                  placeholder="Filter..."
                                  value={this.state.value}
                                  onChange={this.onChange} />
