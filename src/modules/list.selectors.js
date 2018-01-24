@@ -9,12 +9,8 @@ const filterDate = (filter, row) => {
     const date = new Date(row[ filter.get('field') ]).getTime();
     const filterDate = new Date(filter.get('value')).getTime();
 
-
-    if (filter.get('label') === 'Date From') {
-        return date > filterDate;
-    }
-
-    return date < filterDate;
+    //TODO: Use better identifier than label
+    return filter.get('label') === 'Date From' ? date > filterDate : date < filterDate;
 };
 
 const filterRow = (filters = [], row = {}) => {
