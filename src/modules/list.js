@@ -1,7 +1,6 @@
 import { List, Map } from 'immutable';
 import oboe from 'oboe';
 import Worker from './list.worker';
-import TestWorker from './test.worker';
 
 const ADD_ITEM = 'app/cube/ADD_ITEM';
 const UPDATE_SORT = 'app/cube/UPDATE_SORT';
@@ -58,22 +57,30 @@ const initialCubeState = Map({
 
 const initialFilterState = List([
         Map({
-            name: 'name',
+            id: '1',
+            label: 'Name',
+            field: 'name',
             type: 'text',
             value: '',
         }),
         Map({
-            name: 'age',
+            id: '2',
+            label: 'Age',
+            field: 'age',
             type: 'text',
             value: '',
         }),
         Map({
-            name: 'date',
+            id: '3',
+            label: 'Date From',
+            field: 'date',
             type: 'date',
             value: '',
         }),
         Map({
-            name: 'random',
+            id: '4',
+            label: 'Random',
+            field: 'random',
             type: 'text',
             value: '',
         }),

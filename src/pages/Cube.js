@@ -63,10 +63,8 @@ export class Cube extends PureComponent {
     createFilters = (filters) => {
         return filters.map(x => {
             return (
-                <Filter key={x.get('name')}
-                        name={x.get('name')}
-                        type={x.get('type')}
-                        value={x.get('value')}
+                <Filter key={x.get('id')}
+                        filter={x}
                         onFilterChange={this.props.updateFilters}/>
             );
         });

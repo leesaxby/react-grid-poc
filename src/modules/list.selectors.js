@@ -2,11 +2,11 @@ import { createSelector } from 'reselect';
 
 
 const filterStr = (filter, row) => {
-    return row[ filter.get('name') ].includes( filter.get('value') );
+    return row[ filter.get('field') ].includes( filter.get('value') );
 };
 
 const filterDate = (filter, row) => {
-    return new Date(row[ filter.get('name') ]).getTime() >  new Date(filter.get('value')).getTime();
+    return new Date(row[ filter.get('field') ]).getTime() >  new Date(filter.get('value')).getTime();
 };
 
 const filterRow = (filters = [], row = {}) => {
