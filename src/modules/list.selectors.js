@@ -1,9 +1,26 @@
 import { createSelector } from 'reselect';
 
+
+const filterStr = (filter, row) => {
+    return row[ filter.get('name') ].includes( filter.get('value') );
+};
+
+const filterDate = (filter, row) => {
+    return new Date(row[ filter.get('name') ]).getTime() >  new Date(filter.get('value')).getTime();
+};
+
 const filterRow = (filters = [], row = {}) => {
     return filters
-            .reduce((arr, x) => {
-                arr.push( row[ x.get('name') ].includes( x.get('value') ));
+            .reduce((arr, filter) => {
+                switch (filter.get('type')) {
+                    case 'date':
+                        arr.push( filterDate(filter, row) );
+                        break;
+                    default:
+                        arr.push( filterStr(filter, row) );
+                        break;
+                }
+
                 return arr;
             }, [])
             .every(x => x);
