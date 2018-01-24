@@ -79,6 +79,13 @@ const initialFilterState = List([
         }),
         Map({
             id: '4',
+            label: 'Date To',
+            field: 'date',
+            type: 'date',
+            value: '',
+        }),
+        Map({
+            id: '5',
             label: 'Random',
             field: 'random',
             type: 'text',
@@ -117,7 +124,7 @@ const filters = (state = initialFilterState, action) => {
     switch (action.type) {
         case UPDATE_FILTERS: {
             const index = state.findIndex(filter => {
-                return filter.get('name') === action.payload.get('name');
+                return filter.get('id') === action.payload.get('id');
             });
 
             return state.set(index, action.payload);

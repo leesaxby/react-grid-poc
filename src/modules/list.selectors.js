@@ -6,7 +6,11 @@ const filterStr = (filter, row) => {
 };
 
 const filterDate = (filter, row) => {
-    return new Date(row[ filter.get('field') ]).getTime() >  new Date(filter.get('value')).getTime();
+    if (filter.get('label') === 'Date From') {
+        return new Date(row[ filter.get('field') ]).getTime() > new Date(filter.get('value')).getTime();
+    }
+
+    return new Date(row[ filter.get('field') ]).getTime() < new Date(filter.get('value')).getTime();
 };
 
 const filterRow = (filters = [], row = {}) => {
