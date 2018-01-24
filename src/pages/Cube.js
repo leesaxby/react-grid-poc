@@ -42,7 +42,8 @@ export class Cube extends PureComponent {
                         </Col>
                         <Col lg={3}>
                             <Panel header="Status" bsStyle="primary">
-                                <Status listSize={this.props.totalListSize}
+                                <Status totalListSize={this.props.totalListSize}
+                                        listSize={this.props.list.size}
                                         total={this.props.status.get('total')}/>
                             </Panel>
                         </Col>
